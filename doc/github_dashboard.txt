@@ -1,0 +1,93 @@
+vim-github-dashboard         *vim-github-dashboard* *github-dashboard*
+======================================================================
+
+Browse GitHub dashboard in Vim.
+
+  Author:  Junegunn Choi
+  Source:  https://github.com/junegunn/vim-github-dashboard
+  License: MIT
+
+
+:GitHubDashboard
+----------------------------------------------------------------------
+                                                    *:GitHubDashboard*
+                                                   *:GitHubDashboard!*
+
+Shows the dashboard of a user in a new tab.
+(:GitHubDashboard! will reset the saved credentials.)
+
+
+:GitHubActivity
+----------------------------------------------------------------------
+                                                     *:GitHubActivity*
+                                                    *:GitHubActivity!*
+
+Shows the activity stream of a user in a new tab.
+(:GitHubActivity! will reset the saved credentials.)
+
+
+Navigation
+----------------------------------------------------------------------
+
+Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
+
+Press `Enter` key with the cursor on a link to open the link in the
+default browser.
+
+Press `q` to close the tab.
+
+
+Authentication
+----------------------------------------------------------------------
+                                      *g:github_dashboard['username']*
+                                      *g:github_dashboard['password']*
+
+When you first run `:GitHubDashboard` or `:GitHubActivity` command,
+you will be asked to enter your GitHub username and the password.
+Once it is successfully authenticated, the Vim process will remember
+the credentials and will no more ask for them. However, if you need to
+login as a different user, run `:GitHubDashboard!` or
+`:GitHubActivity!` command.
+
+If you don't want to be asked for username and password when running
+the commands, you can set up `g:github_dashboard` variable as follows.
+
+    let g:github_dashboard = { 'username': 'you', 'password': 'secret' }
+
+Since having plain-text password in your .vimrc is not the most secure
+thing you can do, it is strongly recommended that you put only
+username in your Vim configuration file.
+
+In fact, GitHub API allows you to browse dashboard or activity stream
+without authentication, though the hourly rate is limited to 60.
+Well, that's good enough as long as you don't check GitHub page every
+minute. Define empty `password` to bypass authentication without
+password prompt. If `password` key is not defined, you will be asked
+to enter password.
+
+    " No authentication. Limit: 60 calls/hour
+    let g:github_dashboard = { 'username': 'you', 'password': '' }
+
+
+Optional configuration
+----------------------------------------------------------------------
+                                         *g:github_dashboard['emoji']*
+                                  *g:github_dashboard['open_command']*
+                              *g:github_dashboard['api_open_timeout']*
+                              *g:github_dashboard['api_read_timeout']*
+
+    let g:github_dashboard = { 'username': 'you', 'password': '' }
+
+    " Disable Emoji output
+    " - Default: 1 (enabled)
+    " - (Emoji is only enabled on terminal Vim on MAC)
+    let g:github_dashboard['emoji'] = 0
+
+    " Command to open link URLs
+    " - Default: 'open' on Mac, 'start' on Windows, or 'xdg-open'
+    let g:github_dashboard['open_command'] = 'open'
+
+    " API timeout in seconds
+    " - Default: 10, 20
+    let g:github_dashboard['api_open_timeout'] = 10
+    let g:github_dashboard['api_read_timeout'] = 20
