@@ -222,15 +222,14 @@ endfunction
 " {{{
 ruby << EOF
 require 'rubygems'
-unless %w[json/pure json].any? { |g|
+begin
+  require 'json/pure'
+rescue LoadError
   begin
-    require g
-    true
+    require 'json'
   rescue LoadError
-    false
+    VIM::command("let s:not_loaded = 'JSON gem is not installed. try: sudo gem install json_pure'")
   end
-}
-  VIM::command("let s:not_loaded = 'JSON gem is not installed. try: sudo gem install json_pure'")
 end
 require 'net/http'
 require 'net/https'
