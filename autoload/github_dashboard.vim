@@ -233,7 +233,6 @@ rescue LoadError
 end
 require 'net/http'
 require 'net/https'
-require 'cgi'
 require 'time'
 
 module GitHubDashboard
