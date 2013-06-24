@@ -30,26 +30,6 @@ let s:github_username = ''
 let s:github_password = ''
 let s:more_line       = '   -- MORE --'
 let s:not_loaded      = ''
-let s:emoji_map = {
-\ 'CommitCommentEvent':            '💬',
-\ 'CreateEvent':                   '✨',
-\ 'DeleteEvent':                   '❌',
-\ 'DownloadEvent':                 '📎',
-\ 'FollowEvent':                   '💚',
-\ 'ForkEvent':                     '🍴',
-\ 'ForkApplyEvent':                '🍴',
-\ 'GistEvent':                     '📝',
-\ 'GollumEvent':                   '📝',
-\ 'IssueCommentEvent':             '💬',
-\ 'IssuesEvent':                   '❗',
-\ 'MemberEvent':                   '👥',
-\ 'PublicEvent':                   '🎉',
-\ 'PullRequestEvent':              '👼',
-\ 'PullRequestReviewCommentEvent': '💬',
-\ 'PushEvent':                     '🍡',
-\ 'TeamAddEvent':                  '👥',
-\ 'WatchEvent':                    '⭐'
-\ }
 
 function! s:option(key, default)
   return get(get(g:, 'github_dashboard', {}), a:key, a:default)
@@ -69,6 +49,29 @@ endfunction
 function! s:is_win()
   return has('win32') || has('win64')
 endfunction
+
+if s:is_mac()
+  let s:emoji_map = {
+  \ 'CommitCommentEvent':            '💬',
+  \ 'CreateEvent':                   '✨',
+  \ 'DeleteEvent':                   '❌',
+  \ 'DownloadEvent':                 '📎',
+  \ 'FollowEvent':                   '💚',
+  \ 'ForkEvent':                     '🍴',
+  \ 'ForkApplyEvent':                '🍴',
+  \ 'GistEvent':                     '📝',
+  \ 'GollumEvent':                   '📝',
+  \ 'IssueCommentEvent':             '💬',
+  \ 'IssuesEvent':                   '❗',
+  \ 'MemberEvent':                   '👥',
+  \ 'PublicEvent':                   '🎉',
+  \ 'PullRequestEvent':              '👼',
+  \ 'PullRequestReviewCommentEvent': '💬',
+  \ 'PushEvent':                     '🍡',
+  \ 'TeamAddEvent':                  '👥',
+  \ 'WatchEvent':                    '⭐'
+  \ }
+endif
 
 function! s:open(kw)
   let bufname = '['.a:kw.']'
@@ -232,7 +235,7 @@ endfunction
 
 " {{{
 ruby << EOF
-require 'rubygems'
+require 'rubygems' rescue nil # 1.9.1
 begin
   require 'json/pure'
 rescue LoadError
@@ -244,10 +247,36 @@ rescue LoadError
 end
 require 'net/http'
 require 'net/https'
+require 'open-uri'
 require 'time'
 
 module GitHubDashboard
   class << self
+    def fetch uri, username, password
+      tried = false
+      begin
+        req = Net::HTTP::Get.new(uri.request_uri, 'User-Agent' => 'vim')
+        req.basic_auth username, password unless password.empty?
+
+        http = Net::HTTP.new('api.github.com', uri.port)
+        http.use_ssl = true
+        http.open_timeout = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
+        http.read_timeout = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
+
+        http.request req
+      rescue OpenSSL::SSL::SSLError
+        unless tried
+          # https://gist.github.com/pweldon/767249
+          tried = true
+          tempname = VIM::evaluate('tempname()')
+          IO.copy_stream(open("http://curl.haxx.se/ca/cacert.pem"), tempname)
+          ENV['SSL_CERT_FILE'] ||= tempname
+          retry
+        end
+        raise
+      end
+    end
+
     def more
       overbose = $VERBOSE
       $VERBOSE = nil
@@ -255,15 +284,7 @@ module GitHubDashboard
       password = VIM::evaluate("s:github_password")
       uri      = URI(VIM::evaluate("b:github_more_url"))
 
-      req = Net::HTTP::Get.new(uri.request_uri, 'User-Agent' => 'vim')
-      req.basic_auth username, password unless password.empty?
-
-      http = Net::HTTP.new('api.github.com', uri.port)
-      http.use_ssl = true
-      http.open_timeout = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
-      http.read_timeout = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
-
-      res = http.request req
+      res = fetch uri, username, password
       if res.code =~ /^4/
         error "#{JSON.parse(res.body)['message']} (#{res.code})"
         return
@@ -395,6 +416,9 @@ module GitHubDashboard
       else
         [["#{type} from [#{who}]"], who_url]
       end
+    end
+
+    def resolve_ssl
     end
 
     def wrap str

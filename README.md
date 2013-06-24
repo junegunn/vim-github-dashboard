@@ -31,13 +31,27 @@ git clone git@github.com:junegunn/vim-github-dashboard.git
 Requirements
 ------------
 
-- Ruby support
-  - `:echo has('ruby')`
-  - [Installing Vim with Ruby support](http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby)
-  - Ubuntu: `sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json`
-- `json_pure` or `json` gem
-  - `:ruby require 'json'`
-- Internet connection :grin:
+Your Vim must have Ruby support enabled. Check if `:echo has('ruby')` returns 1.
+This plugin also requires `json_pure` or `json` gem to be installed on your system.
+
+### Mac OS X
+
+If you're running default Vim and Ruby (1.8.7), you need to install json_pure or json gem.
+
+```sh
+sudo gem install json_pure
+```
+
+### Ubuntu
+
+```sh
+sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json
+```
+
+### Windows
+
+Download and install Ruby 1.9.3 using [RubyInstaller](http://rubyinstaller.org/downloads/).
+You must check `Add Ruby executable to your PATH` option.
 
 Commands
 --------
