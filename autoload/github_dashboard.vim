@@ -144,7 +144,7 @@ function! github_dashboard#open(reset_auth, type, ...)
   let password = s:option('password', a:reset_auth ? '' : s:github_password)
   if !s:option_defined('password') && empty(password)
     call inputsave()
-    let password = inputsecret('Enter GitHub password: ')
+    let password = inputsecret('Enter GitHub password (or just press enter): ')
     call inputrestore()
   endif
 

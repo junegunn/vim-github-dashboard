@@ -26,17 +26,17 @@ Requirements
 
 - Ruby support
   - `:echo has('ruby')`
-- JSON gem
+- json or json_pure gem
   - `:ruby require 'json'`
 - Internet connection :grin:
 
 Commands
 --------
 
-- `:GitHubDashboard`
-- `:GitHubDashboard somebody`
-- `:GitHubActivity`
-- `:GitHubActivity somebody`
+- `:GHDashboard`
+- `:GHDashboard somebody`
+- `:GHActivity`
+- `:GHActivity somebody`
 
 Navigation
 ----------
@@ -49,12 +49,12 @@ Press `q` to close the tab.
 Authentication
 --------------
 
-When you first run `:GitHubDashboard` or `:GitHubActivity` command,
+When you first run `:GHDashboard` or `:GHActivity` command,
 you will be asked to enter your GitHub username and the password.
 Once it is successfully authenticated, the Vim process will remember
 the credentials and will no more ask for them. However, if you need to
-login as a different user, run `:GitHubDashboard!` or
-`:GitHubActivity!` command.
+login as a different user, run `:GHDashboard!` or
+`:GHActivity!` command.
 
 If you don't want to be asked for username and password when running
 the commands, you can set up `g:github_dashboard` variable as follows.
