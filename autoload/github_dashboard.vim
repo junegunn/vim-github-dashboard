@@ -385,7 +385,7 @@ module GitHubDashboard
         }
       when 'IssueCommentEvent'
         [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]] +
-        wrap(data['issue']['body']).map { |line| [line] }
+        wrap(data['comment']['body']).map { |line| [line] }
       when 'IssuesEvent'
         [
          ["[#{who}] #{action} issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']],
