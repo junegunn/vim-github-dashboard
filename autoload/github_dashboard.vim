@@ -238,6 +238,8 @@ require 'time'
 module GitHubDashboard
   class << self
     def more
+      overbose = $VERBOSE
+      $VERBOSE = nil
       username = VIM::evaluate("s:github_username")
       password = VIM::evaluate("s:github_password")
       uri      = URI(VIM::evaluate("b:github_more_url"))
@@ -299,6 +301,8 @@ module GitHubDashboard
       VIM::command(%[normal! ^zz])
     rescue Exception => e
       error e
+    ensure
+      $VERBOSE = overbose
     end
 
   private
