@@ -31,19 +31,11 @@ let s:github_password = ''
 let s:more_line       = '   -- MORE --'
 let s:not_loaded      = ''
 
-function! s:option(key, default)
-  return get(get(g:, 'github_dashboard', {}), a:key, a:default)
-endfunction
-
-function! s:option_defined(key)
-  return has_key(get(g:, 'github_dashboard', {}), a:key)
-endfunction
-
-let s:is_mac = has('mac') ||
-             \ has('macunix') ||
-             \ executable('uname') && 
-             \ index(['Darwin', 'Mac'], substitute(system('uname'), '\n', '', '')) != -1
-
+let s:is_mac =
+  \ has('mac') ||
+  \ has('macunix') ||
+  \ executable('uname') &&
+  \ index(['Darwin', 'Mac'], substitute(system('uname'), '\n', '', '')) != -1
 let s:is_win = has('win32') || has('win64')
 
 if s:is_mac
@@ -68,6 +60,14 @@ if s:is_mac
   \ 'WatchEvent':                    '⭐'
   \ }
 endif
+
+function! s:option(key, default)
+  return get(get(g:, 'github_dashboard', {}), a:key, a:default)
+endfunction
+
+function! s:option_defined(key)
+  return has_key(get(g:, 'github_dashboard', {}), a:key)
+endfunction
 
 function! s:open(kw)
   let bufname = '['.a:kw.']'

@@ -111,12 +111,11 @@ Optional configuration
 let g:github_dashboard = { 'username': 'you', 'password': '' }
 
 " Disable Emoji output
-" - Default: 1 (enabled)
-" - (Emoji is only enabled on terminal Vim on MAC)
+" - Default: only enable on terminal Vim on Mac
 let g:github_dashboard['emoji'] = 0
 
 " Command to open link URLs
-" - Default: 'open' on Mac, 'start' on Windows, or 'xdg-open'
+" - Default: auto-detect
 let g:github_dashboard['open_command'] = 'open'
 
 " API timeout in seconds
