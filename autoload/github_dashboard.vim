@@ -59,6 +59,17 @@ function! s:option_defined(key)
   return has_key(get(g:, 'github_dashboard', {}), a:key)
 endfunction
 
+function! s:is_mac()
+  return
+  \ has('mac') ||
+  \ has('macunix') ||
+  \ executable('uname') && index(['Darwin', 'Mac'], substitute(system('uname'), '\n', '', '')) != -1
+endfunction
+
+function! s:is_win()
+  return has('win32') || has('win64')
+endfunction
+
 function! s:open(kw)
   let bufname = '['.a:kw.']'
   let bufidx = 2
@@ -74,7 +85,7 @@ function! s:open(kw)
   let b:github_index = 0
   let b:github_error = 0
   let b:github_links = {}
-  let b:github_emoji = s:option('emoji', 1) && has('mac') && !has('gui_running')
+  let b:github_emoji = s:is_mac() && (!has('gui_running') || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
   syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch
@@ -191,9 +202,9 @@ function! github_dashboard#action()
       let link = b:github_links[line('.')][nth]
       let cmd = s:option('open_command', '')
       if empty(cmd)
-        if has('mac')
+        if s:is_mac()
           let cmd = 'open'
-        elseif has('win32')
+        elseif s:is_win()
           let cmd = 'start'
         elseif executable('xdg-open')
           let cmd = 'xdg-open'
