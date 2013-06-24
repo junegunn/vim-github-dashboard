@@ -39,18 +39,14 @@ function! s:option_defined(key)
   return has_key(get(g:, 'github_dashboard', {}), a:key)
 endfunction
 
-function! s:is_mac()
-  return
-  \ has('mac') ||
-  \ has('macunix') ||
-  \ executable('uname') && index(['Darwin', 'Mac'], substitute(system('uname'), '\n', '', '')) != -1
-endfunction
+let s:is_mac = has('mac') ||
+             \ has('macunix') ||
+             \ executable('uname') && 
+             \ index(['Darwin', 'Mac'], substitute(system('uname'), '\n', '', '')) != -1
 
-function! s:is_win()
-  return has('win32') || has('win64')
-endfunction
+let s:is_win = has('win32') || has('win64')
 
-if s:is_mac()
+if s:is_mac
   let s:emoji_map = {
   \ 'CommitCommentEvent':            '💬',
   \ 'CreateEvent':                   '✨',
@@ -88,7 +84,7 @@ function! s:open(kw)
   let b:github_index = 0
   let b:github_error = 0
   let b:github_links = {}
-  let b:github_emoji = s:is_mac() && (!has('gui_running') || s:option('emoji', 2) == 1)
+  let b:github_emoji = s:is_mac && (!has('gui_running') || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
   syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch
@@ -205,10 +201,10 @@ function! github_dashboard#action()
       let link = b:github_links[line('.')][nth]
       let cmd = s:option('open_command', '')
       if empty(cmd)
-        if s:is_mac()
+        if s:is_mac
           let cmd = 'open'
-        elseif s:is_win()
-          let cmd = 'start'
+        elseif s:is_win
+          let cmd = 'start rundll32 url.dll,FileProtocolHandler'
         elseif executable('xdg-open')
           let cmd = 'xdg-open'
         else
@@ -216,7 +212,11 @@ function! github_dashboard#action()
           return
         endif
       endif
-      call system(cmd . ' ' . link)
+      if s:is_win
+        execute ':!' . cmd . ' ' . link
+      else
+        call system(cmd . ' ' . link)
+      endif
       return
     endif
 
@@ -260,6 +260,7 @@ module GitHubDashboard
 
         http = Net::HTTP.new('api.github.com', uri.port)
         http.use_ssl = true
+        http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE']
         http.open_timeout = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
         http.read_timeout = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
 
@@ -269,8 +270,8 @@ module GitHubDashboard
           # https://gist.github.com/pweldon/767249
           tried = true
           tempname = VIM::evaluate('tempname()')
-          IO.copy_stream(open("http://curl.haxx.se/ca/cacert.pem"), tempname)
-          ENV['SSL_CERT_FILE'] ||= tempname
+          File.open(tempname, 'w') { |f| f << Net::HTTP.get('curl.haxx.se', '/ca/cacert.pem') }
+          ENV['SSL_CERT_FILE'] = tempname
           retry
         end
         raise
