@@ -21,12 +21,21 @@ Bundle 'junegunn/vim-github-dashboard'
 
 then execute, `:BundleInstall` command.
 
+### With Pathogen
+
+```sh
+cd ~/.vim/bundle
+git clone git@github.com:junegunn/vim-github-dashboard.git
+```
+
 Requirements
 ------------
 
 - Ruby support
   - `:echo has('ruby')`
-- json or json_pure gem
+  - [Installing Vim with Ruby support](http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby)
+  - Ubuntu: `sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json`
+- `json_pure` or `json` gem
   - `:ruby require 'json'`
 - Internet connection :grin:
 
