@@ -45,8 +45,10 @@ sudo gem install json_pure
 ### Ubuntu
 
 ```sh
-sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json
+sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json_pure
 ```
+
+(Reference: [Installing vim with ruby support (+ruby)](http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby))
 
 ### Windows
 
