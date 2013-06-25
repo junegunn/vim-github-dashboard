@@ -138,33 +138,35 @@ function! s:emoji(type)
   endif
 endfunction
 
-function! github_dashboard#open(reset_auth, type, ...)
+function! github_dashboard#open(auth, type, ...)
   if !empty(s:not_loaded)
     echoerr s:not_loaded
     return
   endif
 
-  let username = s:option('username', a:reset_auth ? '' : s:github_username)
-  if empty(username)
-    call inputsave()
-    let username = input('Enter GitHub username: ')
-    call inputrestore()
-  endif
-
-  if empty(username)
-    let password = ''
-  else
-    let password = s:option('password', a:reset_auth ? '' : s:github_password)
-    if !s:option_defined('password') && empty(password)
+  if a:auth
+    let username = s:option('username', s:github_username)
+    if empty(username)
       call inputsave()
-      let password = inputsecret('Enter GitHub password (or just press enter): ')
+      let username = input('Enter GitHub username: ')
       call inputrestore()
+      if empty(username) | echo "Empty username" | return | endif
     endif
+
+    let password = s:option('password', s:github_password)
+    if empty(password)
+      call inputsave()
+      let password = inputsecret('Enter GitHub password: ')
+      call inputrestore()
+      if empty(password) | echo "Empty password" | return | endif
+    endif
+  else
+    let username = ''
+    let password = ''
   endif
 
   let who = a:0 == 0 ? username : a:1
-
-  if empty(who) | echo "Which user?" | return | endif
+  if empty(who) | echo "Username not given" | return | endif
 
   call s:open(who)
   let s:github_username = username

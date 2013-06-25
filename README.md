@@ -61,10 +61,19 @@ You must check `Add Ruby executable to your PATH` option.
 Commands
 --------
 
+### With authentication
+
 - `:GHDashboard`
 - `:GHDashboard somebody`
 - `:GHActivity`
 - `:GHActivity somebody`
+
+### Without authentication
+
+- `:GHDashboard!`
+- `:GHDashboard! somebody`
+- `:GHActivity!`
+- `:GHActivity! somebody`
 
 Navigation
 ----------
@@ -80,9 +89,7 @@ Authentication
 When you first run `:GHDashboard` or `:GHActivity` command,
 you will be asked to enter your GitHub username and the password.
 Once it is successfully authenticated, the Vim process will remember
-the credentials and will no more ask for them. However, if you need to
-login as a different user, run `:GHDashboard!` or
-`:GHActivity!` command.
+the credentials and will no more ask for them.
 
 If you don't want to be asked for username and password when running
 the commands, you can set up `g:github_dashboard` variable as follows.
@@ -100,21 +107,12 @@ username in your Vim configuration file.
 In fact, GitHub API allows you to browse dashboard or activity stream
 without authentication, though the hourly rate is limited to 60.
 Well, that's good enough as long as you don't check GitHub page every
-minute. Define empty `password` to bypass authentication without
-password prompt. If `password` key is not defined, you will be asked
-to enter password.
-
-```vim
-" No authentication. Limit: 60 calls/hour
-let g:github_dashboard = { 'username': 'you', 'password': '' }
-```
+minute. Use bang commands then: `:GHDashboard!` and `:GHActivity!`.
 
 Optional configuration
 ----------------------
 
 ```vim
-let g:github_dashboard = { 'username': 'you', 'password': '' }
-
 " Disable Emoji output
 " - Default: only enable on terminal Vim on Mac
 let g:github_dashboard['emoji'] = 0
