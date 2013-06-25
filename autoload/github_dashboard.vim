@@ -165,6 +165,14 @@ function! github_dashboard#open(reset_auth, type, ...)
   let s:github_username = username
   let s:github_password = password
   let b:github_more_url = "https://api.github.com/users/".who."/".a:type
+  if a:type == 'received_events'
+    let b:github_statusline = '[GitHub Dashboard: '. who .']'
+  elseif a:type == 'events'
+    let b:github_statusline = '[GitHub Activity: '. who .']'
+  else
+    echoerr "Invalid type"
+  endif
+  setlocal statusline=%!github_dashboard#statusline()
 
   call s:call_ruby('Loading GitHub dashboard ...')
   if b:github_error
@@ -178,6 +186,56 @@ function! github_dashboard#open(reset_auth, type, ...)
   nnoremap <silent> <buffer> <S-tab> :silent! call github_dashboard#tab('b')<cr>
 endfunction
 
+function! s:find_url()
+  let line = getline(line('.'))
+  let nth   = 0
+  let start = 0
+  let col   = col('.') - 1
+  while 1
+    let idx = match(line, '\[.\{-}\]', start)
+    if idx == -1 || idx > col | return | endif
+
+    let eidx = match(line, '\[.\{-}\zs\]', start)
+    if col >= idx && col <= eidx
+      return b:github_links[line('.')][nth]
+    endif
+
+    let start = eidx + 1
+    let nth   = nth + 1
+  endwhile
+  return ''
+endfunction
+
+function! s:open_url(url)
+  let cmd = s:option('open_command', '')
+  if empty(cmd)
+    if s:is_mac
+      let cmd = 'open'
+    elseif s:is_win
+      let cmd = 'start rundll32 url.dll,FileProtocolHandler'
+    elseif executable('xdg-open')
+      let cmd = 'xdg-open'
+    else
+      echo "Cannot determine command to open: ". a:url
+      return
+    endif
+  endif
+  if s:is_win
+    execute ':!' . cmd . ' ' . shellescape(a:url)
+  else
+    call system(cmd . ' ' . shellescape(a:url))
+  endif
+endfunction
+
+function! github_dashboard#statusline()
+  let url = s:find_url()
+  if empty(url)
+    return b:github_statusline
+  else
+    return b:github_statusline .' '. url
+  endif
+endfunction
+
 function! github_dashboard#action()
   let line = getline(line('.'))
   if line == s:more_line
@@ -189,40 +247,10 @@ function! github_dashboard#action()
     return
   endif
 
-  let nth   = 0
-  let start = 0
-  let col   = col('.') - 1
-  while 1
-    let idx = match(line, '\[.\{-}\]', start)
-    if idx == -1 || idx > col | return | endif
-
-    let eidx = match(line, '\[.\{-}\zs\]', start)
-    if col >= idx && col <= eidx
-      let link = b:github_links[line('.')][nth]
-      let cmd = s:option('open_command', '')
-      if empty(cmd)
-        if s:is_mac
-          let cmd = 'open'
-        elseif s:is_win
-          let cmd = 'start rundll32 url.dll,FileProtocolHandler'
-        elseif executable('xdg-open')
-          let cmd = 'xdg-open'
-        else
-          echo "Cannot determine command to open: ". link
-          return
-        endif
-      endif
-      if s:is_win
-        execute ':!' . cmd . ' ' . shellescape(link)
-      else
-        call system(cmd . ' ' . shellescape(link))
-      endif
-      return
-    endif
-
-    let start = idx + 1
-    let nth   = nth + 1
-  endwhile
+  let url = s:find_url()
+  if !empty(url)
+    call s:open_url(url)
+  endif
 endfunction
 
 function! github_dashboard#tab(flags)
