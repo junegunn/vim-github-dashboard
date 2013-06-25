@@ -186,9 +186,9 @@ function! github_dashboard#open(reset_auth, type, ...)
   endif
 
   nnoremap <silent> <buffer> q :q<cr>
-  nnoremap <silent> <buffer> <cr>    :call github_dashboard#action()<cr>
-  nnoremap <silent> <buffer> <tab>   :silent! call github_dashboard#tab('')<cr>
-  nnoremap <silent> <buffer> <S-tab> :silent! call github_dashboard#tab('b')<cr>
+  nnoremap <silent> <buffer> <cr>    :call <SID>action()<cr>
+  nnoremap <silent> <buffer> <tab>   :silent! call <SID>tab('')<cr>
+  nnoremap <silent> <buffer> <S-tab> :silent! call <SID>tab('b')<cr>
 endfunction
 
 function! s:find_url()
@@ -241,7 +241,7 @@ function! github_dashboard#statusline()
   endif
 endfunction
 
-function! github_dashboard#action()
+function! s:action()
   let line = getline(line('.'))
   if line == s:more_line
     call s:call_ruby('Loading ...')
@@ -258,7 +258,7 @@ function! github_dashboard#action()
   endif
 endfunction
 
-function! github_dashboard#tab(flags)
+function! s:tab(flags)
   call search(
              \ '\(^ *-- \zsMORE\)\|' .
              \ '\(^ *\[\zs[0-9a-fA-F]\{4,}\]\)\|' .
