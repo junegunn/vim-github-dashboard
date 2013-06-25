@@ -68,11 +68,9 @@ Commands
 - `:GHActivity`
 - `:GHActivity somebody`
 
-### Without authentication
+### Without authentication (60 calls/hour)
 
-- `:GHDashboard!`
 - `:GHDashboard! somebody`
-- `:GHActivity!`
 - `:GHActivity! somebody`
 
 Navigation
