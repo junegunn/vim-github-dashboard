@@ -144,8 +144,8 @@ function! github_dashboard#open(auth, type, ...)
     return
   endif
 
+  let username = s:option('username', s:github_username)
   if a:auth
-    let username = s:option('username', s:github_username)
     if empty(username)
       call inputsave()
       let username = input('Enter GitHub username: ')
@@ -161,7 +161,6 @@ function! github_dashboard#open(auth, type, ...)
       if empty(password) | echo "Empty password" | return | endif
     endif
   else
-    let username = ''
     let password = ''
   endif
 
