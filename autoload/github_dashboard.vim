@@ -84,7 +84,7 @@ function! s:open(kw)
   let b:github_index = 0
   let b:github_error = 0
   let b:github_links = {}
-  let b:github_emoji = s:is_mac && (!has('gui_running') || s:option('emoji', 2) == 1)
+  let b:github_emoji = s:is_mac && ((!has('gui_running') && s:option('emoji', 2) != 0) || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
   syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch
