@@ -151,16 +151,21 @@ function! github_dashboard#open(reset_auth, type, ...)
     call inputrestore()
   endif
 
-  let password = s:option('password', a:reset_auth ? '' : s:github_password)
-  if !s:option_defined('password') && empty(password)
-    call inputsave()
-    let password = inputsecret('Enter GitHub password (or just press enter): ')
-    call inputrestore()
+  if empty(username)
+    let password = ''
+  else
+    let password = s:option('password', a:reset_auth ? '' : s:github_password)
+    if !s:option_defined('password') && empty(password)
+      call inputsave()
+      let password = inputsecret('Enter GitHub password (or just press enter): ')
+      call inputrestore()
+    endif
   endif
 
-  if empty(username) | echo "Empty username." | return | endif
-
   let who = a:0 == 0 ? username : a:1
+
+  if empty(who) | echo "Which user?" | return | endif
+
   call s:open(who)
   let s:github_username = username
   let s:github_password = password
@@ -316,6 +321,9 @@ module GitHubDashboard
       res = fetch uri, username, password
       if res.code =~ /^4/
         error "#{JSON.parse(res.body)['message']} (#{res.code})"
+        # Invalidate credentials
+        VIM::command(%[let s:github_username = ''])
+        VIM::command(%[let s:github_password = ''])
         return
       elsif res.code !~ /^2/
         error "Failed to load data (#{res.code})"
@@ -328,8 +336,6 @@ module GitHubDashboard
       more = more && more.split('>; rel')[0][1..-1]
 
       VIM::command(%[normal! Gd$])
-      VIM::command(%[let s:github_username = '#{username}'])
-      VIM::command(%[let s:github_password = '#{password}'])
       if more
         VIM::command(%[let b:github_more_url = '#{more}'])
       else
