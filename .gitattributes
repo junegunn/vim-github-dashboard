@@ -3,3 +3,4 @@
 doc/tags       export-ignore
 README.md      export-ignore
 zip            export-ignore
+*.png          export-ignore
