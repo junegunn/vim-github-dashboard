@@ -213,9 +213,9 @@ function! github_dashboard#action()
         endif
       endif
       if s:is_win
-        execute ':!' . cmd . ' ' . link
+        execute ':!' . cmd . ' ' . shellescape(link)
       else
-        call system(cmd . ' ' . link)
+        call system(cmd . ' ' . shellescape(link))
       endif
       return
     endif
