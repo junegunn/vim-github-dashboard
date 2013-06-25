@@ -31,7 +31,7 @@ git clone git@github.com:junegunn/vim-github-dashboard.git
 Requirements
 ------------
 
-Your Vim must have Ruby support enabled. Check if `:echo has('ruby')` returns 1.
+Your Vim must have Ruby support enabled. Check if `:echo has('ruby')` prints 1.
 This plugin also requires `json_pure` or `json` gem to be installed on your system.
 
 ### Mac OS X
@@ -41,6 +41,9 @@ If you're running default Vim and Ruby (1.8.7), you need to install json_pure or
 ```sh
 sudo gem install json_pure
 ```
+
+However, if your Vim crashes, try installing a newer version of Vim
+with [Homebrew](http://mxcl.github.io/homebrew/).
 
 ### Ubuntu
 
