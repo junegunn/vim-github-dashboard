@@ -168,8 +168,10 @@ function! github_dashboard#open(auth, type, ...)
   if empty(who) | echo "Username not given" | return | endif
 
   call s:open(who)
-  let s:github_username = username
-  let s:github_password = password
+  if a:auth
+    let s:github_username = username
+    let s:github_password = password
+  endif
   let b:github_more_url = "https://api.github.com/users/".who."/".a:type
   if a:type == 'received_events'
     let b:github_statusline = '[GitHub Dashboard: '. who .']'
