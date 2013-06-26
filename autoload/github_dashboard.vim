@@ -61,6 +61,8 @@ if s:is_mac
   \ }
 endif
 
+let s:original_statusline = &statusline
+
 function! s:option(key, default)
   return get(get(g:, 'github_dashboard', {}), a:key, a:default)
 endfunction
@@ -78,7 +80,7 @@ function! s:open(kw)
   endwhile
 
   tabnew
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonu cursorline
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonu cursorline foldmethod=manual
   setf github-dashboard
   silent! execute "f ".fnameescape(bufname)
   let b:github_index = 0
@@ -236,12 +238,15 @@ function! s:open_url(url)
 endfunction
 
 function! github_dashboard#statusline()
-  let url = s:find_url()
-  if empty(url)
-    return b:github_statusline
+  if exists('b:github_statusline')
+    let url = s:find_url()
+    if empty(url)
+      return b:github_statusline
+    else
+      return b:github_statusline .' '. url
+    endif
   else
-    return b:github_statusline .' '. url
-  endif
+    return s:original_statusline
 endfunction
 
 function! s:action()
