@@ -3,7 +3,9 @@ vim-github-dashboard
 
 Browse GitHub dashboard in Vim.
 
-![matz's activity stream](https://github.com/junegunn/vim-github-dashboard/raw/master/screenshot.png)
+### `:GHA! dhh`
+
+![dhh's activity stream](https://github.com/junegunn/vim-github-dashboard/raw/master/screenshot.png)
 
 Installation
 ------------
