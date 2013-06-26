@@ -327,14 +327,13 @@ module GitHubDashboard
       uri      = URI(VIM::evaluate("b:github_more_url"))
 
       res = fetch uri, username, password
-      if res.code =~ /^4/
+      if res.code !~ /^2/
+        if %w[401 403].include? res.code
+          # Invalidate credentials
+          VIM::command(%[let s:github_username = ''])
+          VIM::command(%[let s:github_password = ''])
+        end
         error "#{JSON.parse(res.body)['message']} (#{res.code})"
-        # Invalidate credentials
-        VIM::command(%[let s:github_username = ''])
-        VIM::command(%[let s:github_password = ''])
-        return
-      elsif res.code !~ /^2/
-        error "Failed to load data (#{res.code})"
         return
       end
 
