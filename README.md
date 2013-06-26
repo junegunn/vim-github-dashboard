@@ -1,7 +1,7 @@
 vim-github-dashboard
 ====================
 
-Browse GitHub dashboard in Vim.
+Browse GitHub events (user dashboard, user activity, and repository activies) in Vim.
 
 ### `:GHA! dhh`
 
@@ -68,14 +68,16 @@ Commands
 ### With authentication
 
 - `:GHDashboard`
-- `:GHDashboard somebody`
+- `:GHDashboard USER`
 - `:GHActivity`
-- `:GHActivity somebody`
+- `:GHActivity USER`
+- `:GHActivity USER/REPO`
 
 ### Without authentication (60 calls/hour)
 
-- `:GHDashboard! somebody`
-- `:GHActivity! somebody`
+- `:GHDashboard! USER`
+- `:GHActivity! USER`
+- `:GHActivity! USER/REPO`
 
 Navigation
 ----------

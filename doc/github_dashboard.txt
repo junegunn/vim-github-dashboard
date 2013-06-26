@@ -1,7 +1,8 @@
 vim-github-dashboard         *vim-github-dashboard* *github-dashboard*
 ======================================================================
 
-Browse GitHub dashboard in Vim.
+Browse GitHub events (user dashboard, user activity, and repository
+activies) in Vim.
 
   Author:  Junegunn Choi
   Source:  https://github.com/junegunn/vim-github-dashboard
@@ -22,7 +23,8 @@ Shows the dashboard of a user in a new tab.
                                                          *:GHActivity*
                                                         *:GHActivity!*
 
-Shows the activity stream of a user in a new tab.
+Shows the activity stream of a user [USER] or a repository [USER/REPO]
+in a new tab.
 (:GHActivity! does not require authentication)
 
 
@@ -33,6 +35,8 @@ Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
 
 Press `Enter` key with the cursor on a link to open the link in the
 default browser.
+
+Press `R` to refresh the tab.
 
 Press `q` to close the tab.
 

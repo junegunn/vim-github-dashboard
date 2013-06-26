@@ -71,24 +71,31 @@ function! s:option_defined(key)
   return has_key(get(g:, 'github_dashboard', {}), a:key)
 endfunction
 
-function! s:open(kw)
-  let bufname = '['.a:kw.']'
-  let bufidx = 2
-  while bufexists(bufname)
-    let bufname = '['.a:kw.']('. bufidx .')'
-    let bufidx = bufidx + 1
-  endwhile
-
-  tabnew
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonu cursorline foldmethod=manual
-  setf github-dashboard
-  silent! execute "f ".fnameescape(bufname)
+function! s:init_tab(what, type)
   let b:github_index = 0
   let b:github_error = 0
   let b:github_links = {}
   let b:github_emoji = s:is_mac && ((!has('gui_running') && s:option('emoji', 2) != 0) || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
+  let slashes = len(split(a:what, '/'))
+
+  let path = slashes == 1 ? '/users/' : '/repos/'
+  let b:github_more_url = "https://api.github.com" .path.a:what. "/" .a:type
+  if a:type == 'received_events'
+    if slashes > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
+    let b:github_statusline = '[GitHub Dashboard: '.a:what.']'
+  elseif a:type == 'events'
+    if slashes > 2 | echoerr "Invalid username or repository" | return 0 | endif
+    let b:github_statusline = '[GitHub Activity: '.a:what.']'
+  else
+    echoerr "Invalid type"
+    return 0
+  endif
+
+  setlocal statusline=%!github_dashboard#statusline()
+
+  syntax clear
   syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch
   syntax match githubNumber /^ \{0,2}[0-9]\{-1,})/ contained
   syntax match githubTime   /(.\{-1,})$/ contained
@@ -112,8 +119,30 @@ function! s:open(kw)
   hi def link githubCommit  Special
   execute 'syntax match githubKeyword /'.s:more_line.'/'
   syntax match githubKeyword /^Loading.*/
-  " execute 'syntax keyword Keyword ' .a:kw
   hi def link githubKeyword Conditional
+
+  return 1
+endfunction
+
+function! s:refresh()
+
+endfunction
+
+function! s:open(what, type)
+  " Assign buffer name
+  let bufname = '['.a:what.']'
+  let bufidx = 2
+  while bufexists(bufname)
+    let bufname = '['.a:what.']('. bufidx .')'
+    let bufidx = bufidx + 1
+  endwhile
+
+  tabnew
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonu cursorline foldmethod=manual
+  setf github-dashboard
+  silent! execute "f ".fnameescape(bufname)
+
+  return s:init_tab(a:what, a:type)
 endfunction
 
 function! s:call_ruby(msg)
@@ -169,20 +198,15 @@ function! github_dashboard#open(auth, type, ...)
   let who = a:0 == 0 ? username : a:1
   if empty(who) | echo "Username not given" | return | endif
 
-  call s:open(who)
+  if !s:open(who, a:type)
+    bd
+    return
+  endif
+
   if a:auth
     let s:github_username = username
     let s:github_password = password
   endif
-  let b:github_more_url = "https://api.github.com/users/".who."/".a:type
-  if a:type == 'received_events'
-    let b:github_statusline = '[GitHub Dashboard: '. who .']'
-  elseif a:type == 'events'
-    let b:github_statusline = '[GitHub Activity: '. who .']'
-  else
-    echoerr "Invalid type"
-  endif
-  setlocal statusline=%!github_dashboard#statusline()
 
   call s:call_ruby('Loading GitHub dashboard ...')
   if b:github_error
@@ -190,7 +214,8 @@ function! github_dashboard#open(auth, type, ...)
     return
   endif
 
-  nnoremap <silent> <buffer> q :q<cr>
+  nnoremap <silent> <buffer> q       :q<cr>
+  nnoremap <silent> <buffer> R       :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>    :call <SID>action()<cr>
   nnoremap <silent> <buffer> <tab>   :silent! call <SID>tab('')<cr>
   nnoremap <silent> <buffer> <S-tab> :silent! call <SID>tab('b')<cr>
