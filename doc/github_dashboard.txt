@@ -47,14 +47,16 @@ you will be asked to enter your GitHub username and the password.
 Once it is successfully authenticated, the Vim process will remember
 the credentials and will no more ask for them.
 
-If you don't want to be asked for username and password when running
-the commands, you can set up `g:github_dashboard` variable as follows.
+If you don't want to be asked for username and password, you can set up
+`g:github_dashboard` variable as follows.
 
     let g:github_dashboard = { 'username': 'you', 'password': 'secret' }
 
 Since having plain-text password in your .vimrc is not the most secure
-thing you can do, it is strongly recommended that you put only
-username in your Vim configuration file.
+thing you can do, it is strongly recommended that you don't put password in
+your Vim configuration file.
+
+    let g:github_dashboard = { 'username': 'you' }
 
 In fact, GitHub API allows you to browse dashboard or activity stream
 without authentication, though the hourly rate is limited to 60.

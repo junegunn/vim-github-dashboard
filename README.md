@@ -60,6 +60,8 @@ sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json_pur
 Download and install Ruby 1.9.3 using [RubyInstaller](http://rubyinstaller.org/downloads/).
 You must check `Add Ruby executable to your PATH` option.
 
+Ruby support of Windows GVim is unstable at the moment, so you may run into some glitches.
+
 Commands
 --------
 
@@ -91,16 +93,20 @@ you will be asked to enter your GitHub username and the password.
 Once it is successfully authenticated, the Vim process will remember
 the credentials and will no more ask for them.
 
-If you don't want to be asked for username and password when running
-the commands, you can set up `g:github_dashboard` variable as follows.
+If you don't want to be asked for username and password, you can set up
+`g:github_dashboard` variable as follows.
 
 ```vim
 let g:github_dashboard = { 'username': 'you', 'password': 'secret' }
 ```
 
 Since having plain-text password in your .vimrc is not the most secure
-thing you can do, it is strongly recommended that you put only
-username in your Vim configuration file.
+thing you can do, it is strongly recommended that you don't put password in
+your Vim configuration file.
+
+```vim
+let g:github_dashboard = { 'username': 'you' }
+```
 
 ### Without authentication
 
