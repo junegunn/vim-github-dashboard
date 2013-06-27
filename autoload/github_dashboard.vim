@@ -230,11 +230,12 @@ function! github_dashboard#open(auth, type, ...)
     return
   endif
 
-  nnoremap <silent> <buffer> q       :q<cr>
-  nnoremap <silent> <buffer> R       :call <SID>refresh()<cr>
-  nnoremap <silent> <buffer> <cr>    :call <SID>action()<cr>
-  nnoremap <silent> <buffer> <tab>   :silent! call <SID>tab('')<cr>
-  nnoremap <silent> <buffer> <S-tab> :silent! call <SID>tab('b')<cr>
+  nnoremap <silent> <buffer> q             :q<cr>
+  nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
+  nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
+  nnoremap <silent> <buffer> <2-LeftMouse> :call <SID>action()<cr>
+  nnoremap <silent> <buffer> <tab>         :silent! call <SID>tab('')<cr>
+  nnoremap <silent> <buffer> <S-tab>       :silent! call <SID>tab('b')<cr>
 endfunction
 
 function! s:find_url()
