@@ -80,14 +80,14 @@ function! s:init_tab(...)
 
   if a:0 == 2
     let [what, type] = a:000
-    let slashes = len(split(what, '/'))
-    let path = slashes == 1 ? '/users/' : '/repos/'
+    let elems = len(filter(split(what, '/', 1), '!empty(v:val)'))
+    if elems == 0 || elems > 2 | echoerr "Invalid username or repository" | return 0 | endif
+    let path = elems == 1 ? '/users/' : '/repos/'
     let b:github_init_url = "https://api.github.com" .path.what. "/" .type
     if type == 'received_events'
-      if slashes > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
+      if elems > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
       let b:github_statusline = '[GitHub Dashboard: '.what.']'
     elseif type == 'events'
-      if slashes > 2 | echoerr "Invalid username or repository" | return 0 | endif
       let b:github_statusline = '[GitHub Activity: '.what.']'
     else
       echoerr "Invalid type"
