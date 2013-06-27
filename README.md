@@ -1,7 +1,7 @@
 vim-github-dashboard
 ====================
 
-Browse GitHub events (user dashboard, user activity, and repository activies) in Vim.
+Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
 ### `:GHA! dhh`
 
@@ -83,8 +83,12 @@ Navigation
 ----------
 
 Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
+
 Press `Enter` key with the cursor on a link to open the link in the
 default browser.
+
+Press `R` to refresh the tab.
+
 Press `q` to close the tab.
 
 Authentication

@@ -71,27 +71,30 @@ function! s:option_defined(key)
   return has_key(get(g:, 'github_dashboard', {}), a:key)
 endfunction
 
-function! s:init_tab(what, type)
+function! s:init_tab(...)
   let b:github_index = 0
   let b:github_error = 0
   let b:github_links = {}
   let b:github_emoji = s:is_mac && ((!has('gui_running') && s:option('emoji', 2) != 0) || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
-  let slashes = len(split(a:what, '/'))
-
-  let path = slashes == 1 ? '/users/' : '/repos/'
-  let b:github_more_url = "https://api.github.com" .path.a:what. "/" .a:type
-  if a:type == 'received_events'
-    if slashes > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
-    let b:github_statusline = '[GitHub Dashboard: '.a:what.']'
-  elseif a:type == 'events'
-    if slashes > 2 | echoerr "Invalid username or repository" | return 0 | endif
-    let b:github_statusline = '[GitHub Activity: '.a:what.']'
-  else
-    echoerr "Invalid type"
-    return 0
+  if a:0 == 2
+    let [what, type] = a:000
+    let slashes = len(split(what, '/'))
+    let path = slashes == 1 ? '/users/' : '/repos/'
+    let b:github_init_url = "https://api.github.com" .path.what. "/" .type
+    if type == 'received_events'
+      if slashes > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
+      let b:github_statusline = '[GitHub Dashboard: '.what.']'
+    elseif type == 'events'
+      if slashes > 2 | echoerr "Invalid username or repository" | return 0 | endif
+      let b:github_statusline = '[GitHub Activity: '.what.']'
+    else
+      echoerr "Invalid type"
+      return 0
+    endif
   endif
+  let b:github_more_url = b:github_init_url
 
   setlocal statusline=%!github_dashboard#statusline()
 
@@ -119,13 +122,26 @@ function! s:init_tab(what, type)
   hi def link githubCommit  Special
   execute 'syntax match githubKeyword /'.s:more_line.'/'
   syntax match githubKeyword /^Loading.*/
+  syntax match githubKeyword /^Reloading.*/
+  syntax match githubFailure /^Failed.*/
   hi def link githubKeyword Conditional
+  hi def link githubFailure Exception
 
   return 1
 endfunction
 
 function! s:refresh()
+  call s:init_tab()
+  setlocal modifiable
+  normal! ggdG
+  setlocal nomodifiable
 
+  call s:call_ruby('Reloading GitHub event stream ...')
+  if b:github_error
+    call setline(line('$'), 'Failed to load events. Press R to reload.')
+    setlocal nomodifiable
+    return
+  endif
 endfunction
 
 function! s:open(what, type)
@@ -151,12 +167,12 @@ function! s:call_ruby(msg)
     return
   endif
 
-  set modifiable
+  setlocal modifiable
   call setline(line('$'), a:msg)
   redraw!
   ruby GitHubDashboard.more
   if !b:github_error
-    set nomodifiable
+    setlocal nomodifiable
   end
 endfunction
 
@@ -208,7 +224,7 @@ function! github_dashboard#open(auth, type, ...)
     let s:github_password = password
   endif
 
-  call s:call_ruby('Loading GitHub dashboard ...')
+  call s:call_ruby('Loading GitHub event stream ...')
   if b:github_error
     bd
     return
@@ -280,7 +296,7 @@ function! s:action()
     call s:call_ruby('Loading ...')
     if b:github_error
       call setline(line('$'), s:more_line)
-      set nomodifiable
+      setlocal nomodifiable
     endif
     return
   endif

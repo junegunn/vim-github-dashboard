@@ -1,8 +1,7 @@
 vim-github-dashboard         *vim-github-dashboard* *github-dashboard*
 ======================================================================
 
-Browse GitHub events (user dashboard, user activity, and repository
-activies) in Vim.
+Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
   Author:  Junegunn Choi
   Source:  https://github.com/junegunn/vim-github-dashboard
