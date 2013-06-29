@@ -30,6 +30,7 @@ let s:github_username = ''
 let s:github_password = ''
 let s:more_line       = '   -- MORE --'
 let s:not_loaded      = ''
+let s:history         = { 'received_events': {}, 'events': {} }
 
 let s:is_mac =
   \ has('mac') ||
@@ -230,6 +231,8 @@ function! github_dashboard#open(auth, type, ...)
     return
   endif
 
+  let s:history[a:type][who] = 1
+
   nnoremap <silent> <buffer> q             :q<cr>
   nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
@@ -289,6 +292,11 @@ function! github_dashboard#statusline()
     endif
   else
     return s:original_statusline
+endfunction
+
+function! github_dashboard#autocomplete(arg, cmd, cur)
+  let type = (a:cmd =~ '^GHA') ? 'events' : 'received_events'
+  return filter(keys(s:history[type]), 'v:val =~ "^'. escape(a:arg, '"') .'"')
 endfunction
 
 function! s:action()
@@ -381,7 +389,7 @@ module GitHubDashboard
 
       # Doesn't work on 1.8.7
       # more = res.header['Link'].scan(/(?<=<).*?(?=>; rel=\"next)/)[0]
-      more = res.header['Link'].scan(/<.*?; rel=\"next/)[0]
+      more = res.header['Link'] && res.header['Link'].scan(/<.*?; rel=\"next/)[0]
       more = more && more.split('>; rel')[0][1..-1]
 
       VIM::command(%[normal! Gd$])
