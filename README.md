@@ -92,7 +92,7 @@ Navigation
 
 Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
 
-Press `Enter` key or double-click on a link to open it in the browser.
+Press `Enter` key or `double-click` on a link to open it in the browser.
 
 Press `R` to refresh the tab.
 
