@@ -3,17 +3,17 @@ vim-github-dashboard
 
 Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
-### User dashboard: `:GHD! torvalds`
+### User dashboard: `:GHD! matz`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/torvalds.png)
+![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/matz-dashboard.png)
 
-### User activity: `:GHA! dhh`
+### User activity: `:GHA! matz`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/dhh.png)
+![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/matz-activity.png)
 
 ### Repository activity: `:GHA! ruby/ruby`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/ruby.png)
+![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/ruby-activity.png)
 
 Installation
 ------------
