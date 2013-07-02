@@ -1294,7 +1294,7 @@ module GitHubDashboard
           line, *links = line
 
           if idx == 0
-            emoji = VIM::evaluate("s:emoji_for('#{event['type']}', 1)")
+            emoji = to_utf8 VIM::evaluate("s:emoji_for('#{event['type']}', 1)")
             line = emoji + line
             bfr.append bfr.count - 1,
               "#{index.to_s.rjust(3)}) #{line} (#{format_time event['created_at']})"
@@ -1362,7 +1362,7 @@ module GitHubDashboard
           ["Edited [#{page['title']}]", page['html_url']]
         }
       when 'IssueCommentEvent'
-        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]] +
+        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]]
         wrap(data['comment']['body']).map { |line| [line] }
       when 'IssuesEvent'
         title = emoji data['issue']['title']
@@ -1438,10 +1438,18 @@ module GitHubDashboard
       end
     end
 
+    def to_utf8 str
+      if str.respond_to?(:force_encoding)
+        str.force_encoding('UTF-8')
+      else
+        str
+      end
+    end
+
     if VIM::evaluate("s:is_mac") == 1
       def emoji str
         str.gsub(/:[-+0-9a-zA-Z_]+:/) { |m|
-          e = VIM::evaluate("s:emoji('#{m[1..-2]}')")
+          e = to_utf8 VIM::evaluate("s:emoji('#{m[1..-2]}')")
           e.empty? ? m : e
         }
       end
