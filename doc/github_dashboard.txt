@@ -79,6 +79,14 @@ Optional configuration
     " - Default: only enable on terminal Vim on Mac
     let g:github_dashboard['emoji'] = 0
 
+    " Customize emoji (see http://www.emoji-cheat-sheet.com/)
+    let g:github_dashboard['emoji_map'] = {
+    \   'user_dashboard': 'blush',
+    \   'user_activity':  'smile',
+    \   'repo_activity':  'laughing',
+    \   'ForkEvent':      'fork_and_knife'
+    \ }
+
     " Command to open link URLs
     " - Default: auto-detect
     let g:github_dashboard['open_command'] = 'open'
