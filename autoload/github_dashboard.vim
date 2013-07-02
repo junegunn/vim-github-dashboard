@@ -1362,7 +1362,7 @@ module GitHubDashboard
           ["Edited [#{page['title']}]", page['html_url']]
         }
       when 'IssueCommentEvent'
-        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]]
+        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]] +
         wrap(data['comment']['body']).map { |line| [line] }
       when 'IssuesEvent'
         title = emoji data['issue']['title']
