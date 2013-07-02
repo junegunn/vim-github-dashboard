@@ -11,9 +11,9 @@ Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
 ![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/matz-activity.png)
 
-### Repository activity: `:GHA! ruby/ruby`
+### Repository activity: `:GHA! mruby/mruby`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/ruby-activity.png)
+![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/mruby-activity.png)
 
 Installation
 ------------
