@@ -947,9 +947,10 @@ function! s:emoji(name, ...)
 endfunction
 
 function! s:emoji_for(type, pad)
-  if exists("g:github_dashboard['emoji_map']")
+  let custom_map = s:option('emoji_map', {})
+  if !empty(custom_map)
     " TODO inefficient
-    let emoji_map = extend(copy(s:emoji_map), g:github_dashboard['emoji_map'])
+    let emoji_map = extend(copy(s:emoji_map), custom_map)
     return s:emoji(get(emoji_map, a:type, ''), a:pad)
   else
     return s:emoji(get(s:emoji_map, a:type, ''), a:pad)
@@ -1057,7 +1058,25 @@ function! s:refresh()
 endfunction
 
 function! s:open(what, type)
-  tabnew
+  let pos = s:option('position', s:is_win ? 'top' : 'tab')
+  if pos ==? 'tab'
+    tabnew
+  elseif pos ==? 'top'
+    topleft new
+  elseif pos ==? 'bottom'
+    botright new
+  elseif pos ==? 'above'
+    aboveleft new
+  elseif pos ==? 'below'
+    belowright new
+  elseif pos ==? 'left'
+    vertical new
+  elseif pos ==? 'right'
+    vertical rightbelow new
+  else
+    tabnew
+  endif
+
   return s:init_tab(a:what, a:type)
 endfunction
 

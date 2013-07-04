@@ -134,6 +134,11 @@ Optional configuration
 ----------------------
 
 ```vim
+" Dashboard window position
+" - Options: tab, top, bottom, above, below, left, right
+" - Default: `top` on Windows, `tab` on others
+let g:github_dashboard['position'] = 'top'
+
 " Disable Emoji output
 " - Default: only enable on terminal Vim on Mac
 let g:github_dashboard['emoji'] = 0
