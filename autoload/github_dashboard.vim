@@ -947,9 +947,13 @@ function! s:emoji(name, ...)
 endfunction
 
 function! s:emoji_for(type, pad)
-  " TODO inefficient
-  let emoji_map = extend(copy(s:emoji_map), get(g:github_dashboard, 'emoji_map', {}))
-  return s:emoji(get(emoji_map, a:type, ''), a:pad)
+  if exists("g:github_dashboard['emoji_map']")
+    " TODO inefficient
+    let emoji_map = extend(copy(s:emoji_map), g:github_dashboard['emoji_map'])
+    return s:emoji(get(emoji_map, a:type, ''), a:pad)
+  else
+    return s:emoji(get(s:emoji_map, a:type, ''), a:pad)
+  endif
 endfunction
 
 let s:original_statusline = &statusline
