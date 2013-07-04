@@ -96,9 +96,9 @@ Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
 
 Press `Enter` key or `double-click` on a link to open it in the browser.
 
-Press `R` to refresh the tab.
+Press `R` to refresh the window.
 
-Press `q` to close the tab.
+Press `q` to close the window.
 
 Authentication
 --------------
@@ -136,7 +136,7 @@ Optional configuration
 ```vim
 " Dashboard window position
 " - Options: tab, top, bottom, above, below, left, right
-" - Default: `top` on Windows, `tab` on others
+" - Default: tab
 let g:github_dashboard['position'] = 'top'
 
 " Disable Emoji output

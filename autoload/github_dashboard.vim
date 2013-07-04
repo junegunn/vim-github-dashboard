@@ -1058,7 +1058,7 @@ function! s:refresh()
 endfunction
 
 function! s:open(what, type)
-  let pos = s:option('position', s:is_win ? 'top' : 'tab')
+  let pos = s:option('position', 'tab')
   if pos ==? 'tab'
     tabnew
   elseif pos ==? 'top'
@@ -1074,7 +1074,9 @@ function! s:open(what, type)
   elseif pos ==? 'right'
     vertical rightbelow new
   else
+    echoerr "Invalid position: ". pos
     tabnew
+    return 0
   endif
 
   return s:init_tab(a:what, a:type)

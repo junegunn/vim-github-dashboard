@@ -13,7 +13,7 @@ Browse GitHub events (user dashboard, user/repo activity) in Vim.
                                                         *:GHDashboard*
                                                        *:GHDashboard!*
 
-Shows the dashboard of a user in a new tab.
+Shows the dashboard of a user.
 (:GHDashboard! does not require authentication)
 
 
@@ -22,8 +22,7 @@ Shows the dashboard of a user in a new tab.
                                                          *:GHActivity*
                                                         *:GHActivity!*
 
-Shows the activity stream of a user [USER] or a repository [USER/REPO]
-in a new tab.
+Shows the activity stream of a user [USER] or a repository [USER/REPO].
 (:GHActivity! does not require authentication)
 
 
@@ -34,9 +33,9 @@ Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
 
 Press `Enter` key or double-click on a link to open it in the browser.
 
-Press `R` to refresh the tab.
+Press `R` to refresh the window.
 
-Press `q` to close the tab.
+Press `q` to close the window.
 
 
 Authentication
@@ -77,8 +76,8 @@ Optional configuration
 
     " Dashboard window position
     " - Options: tab, top, bottom, above, below, left, right
-    " - Default: `top` on Windows, `tab` on others
-    let g:github_dashboard['position'] = 'tab'
+    " - Default: tab
+    let g:github_dashboard['position'] = 'top'
 
     " Disable Emoji output
     " - Default: only enable on terminal Vim on Mac
