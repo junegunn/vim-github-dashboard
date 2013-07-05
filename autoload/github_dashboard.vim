@@ -31,6 +31,7 @@ let s:github_password = ''
 let s:more_line       = '   -- MORE --'
 let s:not_loaded      = ''
 let s:history         = { 'received_events': {}, 'events': {} }
+let s:basedir         = expand('<sfile>:p:h')
 
 let s:is_mac =
   \ has('mac') ||
@@ -1273,7 +1274,7 @@ module GitHubDashboard
         unless tried
           # https://gist.github.com/pweldon/767249
           tried = true
-          certpath = File.join(VIM::evaluate("expand('<sfile>:p:h')"), 'cacert.pem')
+          certpath = File.join(VIM::evaluate("s:basedir"), 'cacert.pem')
           unless File.exists?(certpath)
             File.open(certpath, 'w') { |f|
               Net::HTTP.start('curl.haxx.se', 80) do |http|
