@@ -31,6 +31,7 @@ let s:github_password = ''
 let s:more_line       = '   -- MORE --'
 let s:not_loaded      = ''
 let s:history         = { 'received_events': {}, 'events': {} }
+let s:basedir         = expand('<sfile>:p:h')
 
 let s:is_mac =
   \ has('mac') ||
@@ -1263,17 +1264,28 @@ module GitHubDashboard
         http = Net::HTTP.new('api.github.com', uri.port)
         http.use_ssl = true
         http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE']
-        http.open_timeout = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
-        http.read_timeout = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
+        ot = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
+        rt = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
+        http.open_timeout = ot
+        http.read_timeout = rt
 
         http.request req
       rescue OpenSSL::SSL::SSLError
         unless tried
           # https://gist.github.com/pweldon/767249
           tried = true
-          tempname = VIM::evaluate('tempname()')
-          File.open(tempname, 'w') { |f| f << Net::HTTP.get('curl.haxx.se', '/ca/cacert.pem') }
-          ENV['SSL_CERT_FILE'] = tempname
+          certpath = File.join(VIM::evaluate("s:basedir"), 'cacert.pem')
+          unless File.exists?(certpath)
+            File.open(certpath, 'w') { |f|
+              Net::HTTP.start('curl.haxx.se', 80) do |http|
+                http.open_timeout = ot
+                http.read_timeout = rt
+                res = http.get '/ca/cacert.pem'
+                f << res.body
+              end
+            }
+          end
+          ENV['SSL_CERT_FILE'] = certpath
           retry
         end
         raise

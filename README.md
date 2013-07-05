@@ -65,12 +65,11 @@ sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json_pur
 
 (Reference: [Installing vim with ruby support (+ruby)](http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby))
 
-### Windows (*unstable*)
+### Windows
 
-Download and install Ruby 1.9.3 using [RubyInstaller](http://rubyinstaller.org/downloads/).
-You must check `Add Ruby executable to your PATH` option.
-
-Ruby support of Windows GVim is unstable at the moment, so you may run into some glitches.
+1. Download and install the [official GVim](http://www.vim.org/download.php#pc)
+2. Download a newer build of GVim executable from [here](http://wyw.dcweb.cn/#download) and replace the existing one
+3. Download and install Ruby 1.9.3 using [RubyInstaller](http://rubyinstaller.org/downloads/). You must check `Add Ruby executable to your PATH` option.
 
 Commands
 --------
