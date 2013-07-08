@@ -34,6 +34,7 @@ then execute, `:BundleInstall` command.
 ### With Pathogen
 
 ```sh
+mkdir -p ~/.vim/bundle
 cd ~/.vim/bundle
 git clone git@github.com:junegunn/vim-github-dashboard.git
 ```
@@ -82,7 +83,7 @@ Commands
 - `:GHActivity USER`
 - `:GHActivity USER/REPO`
 
-### Without authentication (60 calls/hour)
+### Without authentication (60 calls/hour limit, only public activities)
 
 - `:GHDashboard! USER`
 - `:GHActivity! USER`
@@ -169,3 +170,10 @@ License
 -------
 
 MIT
+
+_"Why Ruby?"_
+-------------
+
+1. It's a personal fun project
+2. And I like Ruby, so why not?
+3. Requiring another Vim plugin and an external executable is not necessarily a better option
