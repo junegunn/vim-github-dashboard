@@ -15,6 +15,8 @@ Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
 ![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/mruby-activity.png)
 
+(Color scheme used: [seoul256-light](https://github.com/junegunn/seoul256.vim))
+
 Installation
 ------------
 
