@@ -1467,7 +1467,6 @@ module GitHubDashboard
         [60,           'second'],
         [60 * 60,      'minute'],
         [60 * 60 * 24, 'hour'  ],
-        [60 * 60 * 24, 'hour'  ],
         [nil, 'day']
       ].each do |pair|
         denom, unit = pair
