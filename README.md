@@ -49,7 +49,7 @@ Requirements
 
 ### Mac OS X
 
-The current version of Mac OS X is shipped with Ruby-enabled Vim.
+The current version of Mac OS X is shipped with a Ruby-enabled Vim.
 However, by default it comes with an old Ruby (1.8.7),
 so you still need to install `json_pure` (or `json`) gem.
 
@@ -176,6 +176,7 @@ MIT
 _"Why Ruby?"_
 -------------
 
-1. It's a personal fun project
-2. And I like Ruby, so why not?
-3. Requiring another Vim plugin and an external executable is not necessarily a better option
+1. This is a personal fun project, and I like Ruby, so why not?
+2. Ruby allows me to access GitHub API without another Vim plugin or an external executable
+3. Mac OS X (which I use the most) is shipped with a Ruby-enabled Vim, so it's pretty easy to set up
+
