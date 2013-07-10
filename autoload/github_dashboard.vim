@@ -1433,7 +1433,7 @@ module GitHubDashboard
         # TODO
         [["#{type} from [#{who}]"], who_url]
       when 'WatchEvent'
-        [["[#{who}] #{action} watching [#{repo}]", who_url, repo_url]]
+        [["[#{who}] starred [#{repo}]", who_url, repo_url]]
       else
         [["#{type} from [#{who}]"], who_url]
       end
