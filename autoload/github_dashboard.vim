@@ -1163,8 +1163,8 @@ function! s:find_url()
     if idx == -1 || idx > col | return | endif
 
     let eidx = match(line, '\[.\{-}\zs\]', start)
-    if col >= idx && col <= eidx
-      return b:github_links[line('.')][nth]
+    if col >= idx && col <= eidx && has_key(b:github_links, line('.'))
+      return get(b:github_links[line('.')], nth, '')
     endif
 
     let start = eidx + 1
@@ -1248,12 +1248,12 @@ rescue LoadError
     VIM::command("let s:not_loaded = 'JSON gem is not installed. try: sudo gem install json_pure'")
   end
 end
-require 'net/http'
+
 require 'net/https'
-require 'open-uri'
 require 'time'
 
 module GitHubDashboard
+  MAX_LINES = 5
   class << self
     def fetch uri, username, password
       tried = false
@@ -1322,7 +1322,7 @@ module GitHubDashboard
         VIM::command(%[unlet b:github_more_url])
       end
 
-      bfr   = VIM::Buffer.current
+      bfr = VIM::Buffer.current
       JSON.parse(res.body).each do |event|
         VIM::command('let b:github_index = b:github_index + 1')
         index = VIM::evaluate('b:github_index')
@@ -1341,8 +1341,8 @@ module GitHubDashboard
           VIM::command(%[let b:github_links[#{bfr.count - 1}] = [#{links.map { |e| vstr e }.join(', ')}]])
         end
 
-        if lines.length > 6
-          VIM::command("normal! #{bfr.count - 1}Gzf#{lines.length - 6}k``")
+        if lines.length > MAX_LINES + 1
+          VIM::command("normal! #{bfr.count - 1}Gzf#{lines.length - MAX_LINES - 1}k``")
         end
       end
       bfr[bfr.count] = VIM::evaluate('s:more_line') if more
