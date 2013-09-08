@@ -1008,7 +1008,9 @@ function! s:init_tab(...)
   endif
   let b:github_more_url = b:github_init_url
 
-  setlocal statusline=%!github_dashboard#statusline()
+  if get(g:, 'github_dashboard_statusline', 1)
+    setlocal statusline=%!github_dashboard#statusline()
+  endif
 
   syntax clear
   syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch,githubGist

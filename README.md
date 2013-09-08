@@ -161,6 +161,10 @@ let g:github_dashboard['open_command'] = 'open'
 " - Default: 10, 20
 let g:github_dashboard['api_open_timeout'] = 10
 let g:github_dashboard['api_read_timeout'] = 20
+
+" Do not set statusline
+" - Then you can customize your own statusline with github_dashboard#statusline()
+let g:github_dashboard_statusline = 0
 ```
 
 Author
