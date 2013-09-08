@@ -1008,7 +1008,7 @@ function! s:init_tab(...)
   endif
   let b:github_more_url = b:github_init_url
 
-  if get(g:, 'github_dashboard_statusline', 1)
+  if s:option('statusline', 1)
     setlocal statusline=%!github_dashboard#statusline()
   endif
 

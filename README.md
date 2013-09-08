@@ -136,6 +136,8 @@ Optional configuration
 ----------------------
 
 ```vim
+let g:github_dashboard = {}
+
 " Dashboard window position
 " - Options: tab, top, bottom, above, below, left, right
 " - Default: tab
@@ -164,7 +166,7 @@ let g:github_dashboard['api_read_timeout'] = 20
 
 " Do not set statusline
 " - Then you can customize your own statusline with github_dashboard#statusline()
-let g:github_dashboard_statusline = 0
+let g:github_dashboard['statusline'] = 0
 ```
 
 Author
