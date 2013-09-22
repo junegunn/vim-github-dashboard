@@ -931,6 +931,7 @@ let s:emoji_map = {
 \  'PullRequestEvent':              'angel',
 \  'PullRequestReviewCommentEvent': 'speech_balloon',
 \  'PushEvent':                     'dango',
+\  'ReleaseEvent':                  'bookmark',
 \  'TeamAddEvent':                  'busts_in_silhouette',
 \  'WatchEvent':                    'star',
 \  'user_dashboard':                'herb',
@@ -1431,13 +1432,20 @@ module GitHubDashboard
           title = emoji commit['message'].lines.first.chomp
           ["[#{commit['sha'][0, 7]}] #{title}", repo_url + '/commit/' + commit['sha']]
         }
+      when 'ReleaseEvent'
+        release_url = data['release']['html_url']
+        [[ "[#{who}] released [#{data['release']['name']}] at [#{repo}]",
+            who_url,
+            release_url,
+            repo_url ]] +
+        data['release']['assets'].map { |a| [ a['label'] ] } # No URL in API
       when 'TeamAddEvent'
         # TODO
-        [["#{type} from [#{who}]"], who_url]
+        [["#{type} from [#{who}]", who_url]]
       when 'WatchEvent'
         [["[#{who}] starred [#{repo}]", who_url, repo_url]]
       else
-        [["#{type} from [#{who}]"], who_url]
+        [["#{type} from [#{who}]", who_url]]
       end
     end
 
