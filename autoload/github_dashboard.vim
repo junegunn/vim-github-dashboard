@@ -1014,7 +1014,7 @@ function! s:init_tab(...)
   endif
 
   syntax clear
-  syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch,githubGist
+  syntax region githubTitle start=/^ \{0,2}[0-9]/ end="\n" oneline contains=githubNumber,Keyword,githubRepo,githubUser,githubTime,githubRef,githubCommit,githubTag,githubBranch,githubGist,githubRelease
   syntax match githubNumber /^ \{0,2}[0-9]\{-1,})/ contained
   syntax match githubTime   /(.\{-1,})$/ contained
   syntax match githubSHA    /^\s\+\[[0-9a-fA-F]\{4,}\]/
@@ -1026,10 +1026,12 @@ function! s:init_tab(...)
   syntax match githubBranch /\(branch \)\@<=\[.\{-1,}\]/ contained
   syntax match githubBranch /\(pushed to \)\@<=\[.\{-1,}\]/ contained
   syntax match githubGist   /\(a gist \)\@<=\[.\{-1,}\]/ contained
+  syntax match githubRelease /\(released \)\@<=\[.\{-1,}\]/ contained
   hi def link githubNumber  Number
   hi def link githubUser    String
   hi def link githubRepo    Identifier
   hi def link githubRef     Special
+  hi def link githubRelease Label
   hi def link githubTag     Label
   hi def link githubBranch  Label
   hi def link githubEdit    Constant
