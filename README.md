@@ -20,26 +20,23 @@ Browse GitHub events (user dashboard, user/repo activity) in Vim.
 Installation
 ------------
 
-Use [Vundle](https://github.com/gmarik/vundle) (recommended)
-or [Pathogen](https://github.com/tpope/vim-pathogen).
+[Use](https://github.com/tpope/vim-pathogen)
+[your](https://github.com/gmarik/vundle)
+[favorite](https://github.com/junegunn/vim-plug)
+[plugin](https://github.com/Shougo/neobundle.vim)
+[manager](https://github.com/MarcWeber/vim-addon-manager).
 
-### With Vundle
-
-Add the following line to your .vimrc,
-
-```vim
-Bundle 'junegunn/vim-github-dashboard'
-```
-
-then execute, `:BundleInstall` command.
-
-### With Pathogen
-
-```sh
-mkdir -p ~/.vim/bundle
-cd ~/.vim/bundle
-git clone git@github.com:junegunn/vim-github-dashboard.git
-```
+- [Pathogen](https://github.com/tpope/vim-pathogen)
+  - `git clone https://github.com/junegunn/vim-github-dashboard.git ~/.vim/bundle/vim-github-dashboard`
+- [Vundle](https://github.com/gmarik/vundle)
+  1. Add `Bundle 'junegunn/vim-github-dashboard'` to .vimrc
+  2. Run `:BundleInstall`
+- [NeoBundle](https://github.com/Shougo/neobundle.vim)
+  1. Add `NeoBundle 'junegunn/vim-github-dashboard'` to .vimrc
+  2. Run `:NeoBundleInstall`
+- [vim-plug](https://github.com/junegunn/vim-plug)
+  1. Add `Plug 'junegunn/vim-github-dashboard'` to .vimrc
+  2. Run `:PlugInstall`
 
 Requirements
 ------------
