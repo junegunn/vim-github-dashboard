@@ -987,10 +987,10 @@ function! s:init_tab(...)
     let b:github_init_url = "https://api.github.com" .path.what. "/" .type
     if type == 'received_events'
       if elems > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
-      let b:github_statusline = '[GitHub Dashboard: '.what.']'
+      let b:github_statusline = ['GitHub Dashboard', what]
       let prefix = s:emoji_for('user_dashboard', 1)
     elseif type == 'events'
-      let b:github_statusline = '[GitHub Activity: '.what.']'
+      let b:github_statusline = ['GitHub Activity', what]
       let prefix = s:emoji_for(elems == 1 ? 'user_activity' : 'repo_activity', 1)
     else
       echoerr "Invalid type"
@@ -1165,7 +1165,7 @@ function! s:find_url()
   let col   = col('.') - 1
   while 1
     let idx = match(line, '\[.\{-}\]', start)
-    if idx == -1 || idx > col | return | endif
+    if idx == -1 || idx > col | return '' | endif
 
     let eidx = match(line, '\[.\{-}\zs\]', start)
     if col >= idx && col <= eidx && has_key(b:github_links, line('.'))
@@ -1199,13 +1199,23 @@ function! s:open_url(url)
   endif
 endfunction
 
+function! github_dashboard#status()
+  if exists('b:github_statusline')
+    let [type, what] = b:github_statusline
+    return { 'type': type, 'what': what, 'url': s:find_url() }
+  else
+    return {}
+  end
+endfunction
+
 function! github_dashboard#statusline()
   if exists('b:github_statusline')
+    let prefix = '['.join(b:github_statusline, ': ').']'
     let url = s:find_url()
     if empty(url)
-      return b:github_statusline
+      return prefix
     else
-      return b:github_statusline .' '. url
+      return prefix .' '. url
     endif
   else
     return s:original_statusline
