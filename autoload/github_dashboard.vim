@@ -1298,6 +1298,13 @@ module GitHubDashboard
     end
 
     def more
+      main = Thread.current
+      watcher = Thread.new {
+        while VIM::evaluate('getchar(1)')
+          sleep 0.1
+        end
+        main.kill
+      }
       overbose = $VERBOSE
       $VERBOSE = nil
       username = VIM::evaluate("s:github_username")
@@ -1355,6 +1362,7 @@ module GitHubDashboard
     rescue Exception => e
       error e
     ensure
+      watcher && watcher.kill
       $VERBOSE = overbose
     end
 
