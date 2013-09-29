@@ -1055,7 +1055,11 @@ function! s:refresh()
   normal! ggdG
   setlocal nomodifiable
 
-  call s:call_ruby('Reloading GitHub event stream ...')
+  try
+    call s:call_ruby('Reloading GitHub event stream ...')
+  catch /^Vim:Interrupt$/
+    let b:github_error = 1
+  endtry
   if b:github_error
     call setline(line('$'), 'Failed to load events. Press R to reload.')
     setlocal nomodifiable
@@ -1142,7 +1146,11 @@ function! github_dashboard#open(auth, type, ...)
     let s:github_password = password
   endif
 
-  call s:call_ruby('Loading GitHub event stream ...')
+  try
+    call s:call_ruby('Loading GitHub event stream ...')
+  catch /^Vim:Interrupt$/
+    let b:github_error = 1
+  endtry
   if b:github_error
     bd
     return
@@ -1229,7 +1237,12 @@ endfunction
 function! s:action()
   let line = getline(line('.'))
   if line == s:more_line
-    call s:call_ruby('Loading ...')
+    try
+      call s:call_ruby('Loading ...')
+    catch /^Vim:Interrupt$/
+      let b:github_error = 1
+    endtry
+
     if b:github_error
       call setline(line('$'), s:more_line)
       setlocal nomodifiable
