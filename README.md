@@ -5,15 +5,15 @@ Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
 ### User dashboard: `:GHD! matz`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/matz-dashboard.png)
+![](https://raw.github.com/junegunn/i/screenshot/matz-dashboard.png)
 
 ### User activity: `:GHA! matz`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/matz-activity.png)
+![](https://raw.github.com/junegunn/i/matz-activity.png)
 
 ### Repository activity: `:GHA! mruby/mruby`
 
-![](https://raw.github.com/junegunn/vim-github-dashboard/screenshot/mruby-activity.png)
+![](https://raw.github.com/junegunn/i/mruby-activity.png)
 
 (Color scheme used: [seoul256-light](https://github.com/junegunn/seoul256.vim))
 
