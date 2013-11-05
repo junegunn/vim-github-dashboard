@@ -977,7 +977,7 @@ function! s:init_tab(...)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
 
   if a:0 == 2
-    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap nonu cursorline foldmethod=manual
+    setlocal buftype=nofile noswapfile nowrap nonu cursorline foldmethod=manual
     setf github-dashboard
 
     let [what, type] = a:000
@@ -1158,7 +1158,7 @@ function! github_dashboard#open(auth, type, ...)
 
   let s:history[a:type][who] = 1
 
-  nnoremap <silent> <buffer> q             :q<cr>
+  nnoremap <silent> <buffer> q             :bd<cr>
   nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
   nnoremap <silent> <buffer> <2-LeftMouse> :call <SID>action()<cr>
