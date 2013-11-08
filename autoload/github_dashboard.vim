@@ -1200,11 +1200,8 @@ function! s:open_url(url)
       return
     endif
   endif
-  if s:is_win
-    execute ':!' . cmd . ' ' . shellescape(a:url)
-  else
-    call system(cmd . ' ' . shellescape(a:url))
-  endif
+  execute ':silent !' . cmd . ' ' . shellescape(a:url)
+  redraw!
 endfunction
 
 function! github_dashboard#status()
