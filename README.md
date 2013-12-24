@@ -129,6 +129,11 @@ without authentication, though the hourly rate is limited to 60.
 Well, that's good enough as long as you don't check GitHub page every
 minute. Use bang commands then: `:GHDashboard!` and `:GHActivity!`.
 
+### Caveat about Github Two-factor authentication
+
+If you enabled [Github Two-factor authentication](https://github.com/settings/two_factor_authentication/configure), then you can not login with your `username` and `password`, but you can generate a [Personal Access Token](https://github.com/settings/applications).
+
+
 Optional configuration
 ----------------------
 
