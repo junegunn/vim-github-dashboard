@@ -1200,7 +1200,7 @@ function! s:open_url(url)
       return
     endif
   endif
-  execute ':silent !' . cmd . ' ' . shellescape(a:url)
+  execute ':silent !' . cmd . ' ' . shellescape(fnameescape(a:url))
   redraw!
 endfunction
 
@@ -1432,7 +1432,7 @@ module GitHubDashboard
           ["Edited [#{page['title']}]", page['html_url']]
         }
       when 'IssueCommentEvent'
-        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['issue']['html_url']]] +
+        [["[#{who}] commented on issue [#{repo}##{data['issue']['number']}]", who_url, data['comment']['html_url']]] +
         wrap(data['comment']['body']).map { |line| [line] }
       when 'IssuesEvent'
         title = emoji data['issue']['title']
