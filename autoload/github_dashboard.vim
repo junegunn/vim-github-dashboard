@@ -975,6 +975,8 @@ function! s:init_tab(...)
   let b:github_links = {}
   let b:github_emoji = s:is_mac && ((!has('gui_running') && s:option('emoji', 2) != 0) || s:option('emoji', 2) == 1)
   let b:github_indent = repeat(' ', b:github_emoji ? 11 : 8)
+  let b:github_api_endpoint = s:option('api_endpoint', 'https://api.github.com')
+  let b:github_web_endpoint = s:option('web_endpoint', 'https://github.com')
 
   if a:0 == 2
     setlocal buftype=nofile noswapfile nowrap nonu cursorline foldmethod=manual
@@ -984,7 +986,7 @@ function! s:init_tab(...)
     let elems = len(filter(split(what, '/', 1), '!empty(v:val)'))
     if elems == 0 || elems > 2 | echoerr "Invalid username or repository" | return 0 | endif
     let path = elems == 1 ? '/users/' : '/repos/'
-    let b:github_init_url = "https://api.github.com" .path.what. "/" .type
+    let b:github_init_url = b:github_api_endpoint .path.what. "/" .type
     if type == 'received_events'
       if elems > 1 | echoerr "Use :GHActivity command instead" | return 0 | endif
       let b:github_statusline = ['Dashboard', what]
@@ -1057,7 +1059,7 @@ function! s:refresh()
 
   try
     call s:call_ruby('Reloading GitHub event stream ...')
-  catch /^Vim:Interrupt$/
+  catch
     let b:github_error = 1
   endtry
   if b:github_error
@@ -1149,12 +1151,12 @@ function! github_dashboard#open(auth, type, ...)
   try
     call s:call_ruby('Loading GitHub event stream ...')
   catch /^Vim:Interrupt$/
-    let b:github_error = 1
-  endtry
-  if b:github_error
     bd
     return
-  endif
+  catch
+    bd
+    throw 'Error: '.v:exception
+  endtry
 
   let s:history[a:type][who] = 1
 
@@ -1286,8 +1288,9 @@ module GitHubDashboard
         req = Net::HTTP::Get.new(uri.request_uri, 'User-Agent' => 'vim')
         req.basic_auth username, password unless password.empty?
 
-        http = Net::HTTP.new('api.github.com', uri.port)
-        http.use_ssl = true
+        api_endpoint = URI(VIM::evaluate('b:github_api_endpoint'))
+        http = Net::HTTP.new(api_endpoint.host, uri.port)
+        http.use_ssl = api_endpoint.scheme == 'https'
         http.ca_file = ENV['SSL_CERT_FILE'] if ENV['SSL_CERT_FILE']
         ot = VIM::evaluate("s:option('api_open_timeout', 10)").to_i
         rt = VIM::evaluate("s:option('api_read_timeout', 20)").to_i
@@ -1327,9 +1330,10 @@ module GitHubDashboard
       }
       overbose = $VERBOSE
       $VERBOSE = nil
-      username = VIM::evaluate("s:github_username")
-      password = VIM::evaluate("s:github_password")
-      uri      = URI(VIM::evaluate("b:github_more_url"))
+      username = VIM::evaluate('s:github_username')
+      password = VIM::evaluate('s:github_password')
+      uri      = URI(VIM::evaluate('b:github_more_url'))
+      prefix   = VIM::evaluate('b:github_web_endpoint')
 
       res = fetch uri, username, password
       if res.code !~ /^2/
@@ -1355,10 +1359,11 @@ module GitHubDashboard
       end
 
       bfr = VIM::Buffer.current
-      JSON.parse(res.body).each do |event|
+      result = JSON.parse(res.body)
+      result.each do |event|
         VIM::command('let b:github_index = b:github_index + 1')
         index = VIM::evaluate('b:github_index')
-        lines = process(event, index)
+        lines = process(prefix, event, index)
         lines.each_with_index do |line, idx|
           line, *links = line
 
@@ -1377,7 +1382,7 @@ module GitHubDashboard
           VIM::command("normal! #{bfr.count - 1}Gzf#{lines.length - MAX_LINES - 1}k``")
         end
       end
-      bfr[bfr.count] = VIM::evaluate('s:more_line') if more
+      bfr[bfr.count] = (more && !result.empty?) ? VIM::evaluate('s:more_line') : ''
       VIM::command(%[normal! ^zz])
     rescue Exception => e
       error e
@@ -1387,7 +1392,7 @@ module GitHubDashboard
     end
 
   private
-    def process event, idx
+    def process endpoint, event, idx
       who    = event['actor']['login']
       type   = event['type']
       data   = event['payload']
@@ -1395,8 +1400,8 @@ module GitHubDashboard
       action = data['action']
       repo   = event['repo'] && event['repo']['name']
 
-      who_url  = "https://github.com/#{who}"
-      repo_url = "https://github.com/#{repo}"
+      who_url  = "#{endpoint}/#{who}"
+      repo_url = "#{endpoint}/#{repo}"
 
       case type
       when 'CommitCommentEvent'
@@ -1417,7 +1422,7 @@ module GitHubDashboard
         [["#{type} from [#{who}]"], who_url]
       when 'FollowEvent'
         whom = data['target']['login']
-        [["[#{who}] started following [#{whom}]", who_url, "https://github.com/#{whom}"]]
+        [["[#{who}] started following [#{whom}]", who_url, "#{endpoint}/#{whom}"]]
       when 'ForkEvent'
         [["[#{who}] forked [#{repo}] to [#{data['forkee']['full_name']}]",
             who_url, repo_url, data['forkee']['html_url']]]

@@ -173,6 +173,10 @@ let g:github_dashboard['api_read_timeout'] = 20
 " Do not set statusline
 " - Then you can customize your own statusline with github_dashboard#status()
 let g:github_dashboard['statusline'] = 0
+
+" GitHub Enterprise
+let g:github_dashboard['api_endpoint'] = 'http://mycorp.github.com/api/v3'
+let g:github_dashboard['web_endpoint'] = 'http://mycorp.github.com'
 ```
 
 Author
