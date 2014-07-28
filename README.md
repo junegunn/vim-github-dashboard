@@ -175,8 +175,8 @@ let g:github_dashboard['api_read_timeout'] = 20
 let g:github_dashboard['statusline'] = 0
 
 " GitHub Enterprise
-let g:github_dashboard['api_endpoint'] = 'http://mycorp.github.com/api/v3'
-let g:github_dashboard['web_endpoint'] = 'http://mycorp.github.com'
+let g:github_dashboard['api_endpoint'] = 'http://github.mycorp.com/api/v3'
+let g:github_dashboard['web_endpoint'] = 'http://github.mycorp.com'
 ```
 
 Author
