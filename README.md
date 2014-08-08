@@ -191,7 +191,7 @@ let g:github_dashboard = {
 \ 'username': 'kent'
 \ }
 
-" Profile named `clark`
+" Profile named `ck`
 let g:github_dashboard#ck = {
 \ 'username':     'kent.clark',
 \ 'api_endpoint': 'http://github.daily-planet.com/api/v3',
