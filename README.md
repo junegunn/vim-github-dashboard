@@ -179,6 +179,46 @@ let g:github_dashboard['api_endpoint'] = 'http://github.mycorp.com/api/v3'
 let g:github_dashboard['web_endpoint'] = 'http://github.mycorp.com'
 ```
 
+Profiles
+--------
+
+In case you need access to GitHub Enterprise as well as the public GitHub, you
+might want to define multiple sets of configuration as profiles.
+
+```vim
+" Default configuration for public GitHub
+let g:github_dashboard = {
+\ 'username': 'kent'
+\ }
+
+" Profile named `clark`
+let g:github_dashboard#ck = {
+\ 'username':     'kent.clark',
+\ 'api_endpoint': 'http://github.daily-planet.com/api/v3',
+\ 'web_endpoint': 'http://github.daily-planet.com'
+\ }
+
+" Profile named `superman`
+let g:github_dashboard#super = {
+\ 'username':     'superman',
+\ 'api_endpoint': 'http://github.justice-league.org/api/v3',
+\ 'web_endpoint': 'http://github.justice-league.org'
+\ }
+```
+
+Then you can access each GitHub instance like so:
+
+```vim
+GHD!
+
+" GitHub Enterprise requires authentication, so use non-bang versions
+GHD -ck
+GHA -ck lois
+
+GHD -super
+GHA -super batman/bmobile
+```
+
 Author
 ------
 

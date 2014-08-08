@@ -26,12 +26,11 @@ if exists("g:loaded_github_dashboard")
 endif
 let g:loaded_github_dashboard = 1
 
-let s:github_username = ''
-let s:github_password = ''
-let s:more_line       = '   -- MORE --'
-let s:not_loaded      = ''
-let s:history         = { 'received_events': {}, 'events': {} }
-let s:basedir         = expand('<sfile>:p:h')
+let s:passwords  = {}
+let s:more_line  = '   -- MORE --'
+let s:not_loaded = ''
+let s:history    = { 'received_events': {}, 'events': {} }
+let s:basedir    = expand('<sfile>:p:h')
 
 let s:is_mac =
   \ has('mac') ||
@@ -961,12 +960,32 @@ endfunction
 
 let s:original_statusline = &statusline
 
-function! s:option(key, default)
-  return get(get(g:, 'github_dashboard', {}), a:key, a:default)
+function! s:password(profile, username)
+  let fromopt = s:option(a:profile, 'password', '')
+  return empty(fromopt) ? get(s:passwords, a:profile.'/'.a:username, '') : fromopt
 endfunction
 
-function! s:option_defined(key)
-  return has_key(get(g:, 'github_dashboard', {}), a:key)
+function! s:remember_password(profile, username, password)
+  let s:passwords[a:profile.'/'.a:username] = a:password
+endfunction
+
+function! s:forget_password(profile, username)
+  silent! call remove(s:passwords, a:profile.'/'.a:username)
+endfunction
+
+function! s:option(...)
+  if a:0 == 2
+    let profile = get(b:, 'github_profile', '')
+    let [key, default] = a:000
+  elseif a:0 == 3
+    let [profile, key, default] = a:000
+  endif
+
+  let base = get(g:, 'github_dashboard', {})
+  let ext = empty(profile) ? {} : get(g:, 'github_dashboard#' . profile, {})
+  let options = extend(copy(base), ext)
+
+  return get(options, key, default)
 endfunction
 
 function! s:init_tab(...)
@@ -1069,7 +1088,7 @@ function! s:refresh()
   endif
 endfunction
 
-function! s:open(what, type)
+function! s:open(profile, what, type)
   let pos = s:option('position', 'tab')
   if pos ==? 'tab'
     tabnew
@@ -1091,6 +1110,7 @@ function! s:open(what, type)
     return 0
   endif
 
+  let b:github_profile = a:profile
   return s:init_tab(a:what, a:type)
 endfunction
 
@@ -1115,7 +1135,14 @@ function! github_dashboard#open(auth, type, ...)
     return
   endif
 
-  let username = s:option('username', s:github_username)
+  let profile = substitute(get(filter(copy(a:000), 'stridx(v:val, "-") == 0'), -1, ''), '^-*', '', '')
+  if !empty(profile) && !exists('g:github_dashboard#'.profile)
+    echoerr 'Profile not defined: '. profile
+    return
+  endif
+
+  let args = filter(copy(a:000), 'stridx(v:val, "-") != 0')
+  let username = s:option(profile, 'username', '')
   if a:auth
     if empty(username)
       call inputsave()
@@ -1124,29 +1151,28 @@ function! github_dashboard#open(auth, type, ...)
       if empty(username) | echo "Empty username" | return | endif
     endif
 
-    let password = s:option('password', s:github_password)
+    let password = s:password(profile, username)
     if empty(password)
       call inputsave()
       let password = inputsecret('Enter GitHub password: ')
       call inputrestore()
       if empty(password) | echo "Empty password" | return | endif
+      call s:remember_password(profile, username, password)
     endif
   else
     let password = ''
   endif
 
-  let who = a:0 == 0 ? username : a:1
+  let who = get(args, 0, username)
   if empty(who) | echo "Username not given" | return | endif
 
-  if !s:open(who, a:type)
+  if !s:open(profile, who, a:type)
     bd
     return
   endif
 
-  if a:auth
-    let s:github_username = username
-    let s:github_password = password
-  endif
+  let b:github_username = username
+  let b:github_password = password
 
   try
     call s:call_ruby('Loading GitHub event stream ...')
@@ -1330,8 +1356,8 @@ module GitHubDashboard
       }
       overbose = $VERBOSE
       $VERBOSE = nil
-      username = VIM::evaluate('s:github_username')
-      password = VIM::evaluate('s:github_password')
+      username = VIM::evaluate('b:github_username')
+      password = VIM::evaluate('b:github_password')
       uri      = URI(VIM::evaluate('b:github_more_url'))
       prefix   = VIM::evaluate('b:github_web_endpoint')
 
@@ -1339,8 +1365,9 @@ module GitHubDashboard
       if res.code !~ /^2/
         if %w[401 403].include? res.code
           # Invalidate credentials
-          VIM::command(%[let s:github_username = ''])
-          VIM::command(%[let s:github_password = ''])
+          VIM::command(%[call s:forget_password(b:github_profile, b:github_username)])
+          VIM::command(%[let b:github_username = ''])
+          VIM::command(%[let b:github_password = ''])
         end
         error "#{JSON.parse(res.body)['message']} (#{res.code})"
         return
