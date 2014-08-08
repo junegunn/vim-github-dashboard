@@ -198,7 +198,7 @@ let g:github_dashboard#ck = {
 \ 'web_endpoint': 'http://github.daily-planet.com'
 \ }
 
-" Profile named `superman`
+" Profile named `super`
 let g:github_dashboard#super = {
 \ 'username':     'superman',
 \ 'api_endpoint': 'http://github.justice-league.org/api/v3',
