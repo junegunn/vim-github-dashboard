@@ -981,10 +981,7 @@ function! s:option(...)
     let [profile, key, default] = a:000
   endif
 
-  let base = get(g:, 'github_dashboard', {})
-  let ext = empty(profile) ? {} : get(g:, 'github_dashboard#' . profile, {})
-  let options = extend(copy(base), ext)
-
+  let options = get(g:, 'github_dashboard' . (empty(profile) ? '' : ('#' . profile)), {})
   return get(options, key, default)
 endfunction
 
