@@ -1497,7 +1497,7 @@ module GitHubDashboard
             who_url,
             release_url,
             repo_url ]] +
-        data['release']['assets'].map { |a| [ a['label'] ] } # No URL in API
+        data['release']['assets'].map { |a| a['label'] }.compact.map { |a| [a] } # No URL in API
       when 'TeamAddEvent'
         # TODO
         [["#{type} from [#{who}]", who_url]]
