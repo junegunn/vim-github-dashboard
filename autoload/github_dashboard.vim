@@ -1070,7 +1070,7 @@ endfunction
 function! s:refresh()
   call s:init_tab()
   setlocal modifiable
-  normal! ggdG
+  normal! gg"_dG
   setlocal nomodifiable
 
   try
@@ -1375,7 +1375,7 @@ module GitHubDashboard
       more = res.header['Link'] && res.header['Link'].scan(/<.*?; rel=\"next/)[0]
       more = more && more.split('>; rel')[0][1..-1]
 
-      VIM::command(%[normal! Gd$])
+      VIM::command(%[normal! G"_d$])
       if more
         VIM::command(%[let b:github_more_url = '#{more}'])
       else
