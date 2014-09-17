@@ -995,7 +995,7 @@ function! s:init_tab(...)
   let b:github_web_endpoint = s:option('web_endpoint', 'https://github.com')
 
   if a:0 == 2
-    setlocal buftype=nofile noswapfile nowrap nonu cursorline foldmethod=manual
+    setlocal buftype=nofile noswapfile nowrap nonu cursorline foldmethod=syntax
     setf github-dashboard
 
     let [what, type] = a:000
@@ -1045,6 +1045,13 @@ function! s:init_tab(...)
   syntax match githubBranch /\(pushed to \)\@<=\[.\{-1,}\]/ contained
   syntax match githubGist   /\(a gist \)\@<=\[.\{-1,}\]/ contained
   syntax match githubRelease /\(released \)\@<=\[.\{-1,}\]/ contained
+
+  syntax region githubFoldBlock start=/\%(\_^ \{4,}.*\n\)\{5}/ms=s+1 end=/\%(^ \{,4}\S\)\@=/ contains=githubFoldBlockLine2
+  syntax region githubFoldBlockLine2 start=/^ \{4,}/ms=e+1 end=/\%(^ \{,4}\S\)\@=/ contained contains=githubFoldBlockLine3 keepend
+  syntax region githubFoldBlockLine3 start=/^ \{4,}/ms=e+1 end=/\%(^ \{,4}\S\)\@=/ contained contains=githubFoldBlockLine4 keepend
+  syntax region githubFoldBlockLine4 start=/^ \{4,}/ms=e+1 end=/\%(^ \{,4}\S\)\@=/ contained contains=githubFoldBlockLine5 keepend
+  syntax region githubFoldBlockLine5 start=/^ \{4,}/ms=e+1 end=/\%(^ \{,4}\S\)\@=/ contained keepend fold
+
   hi def link githubNumber  Number
   hi def link githubUser    String
   hi def link githubRepo    Identifier
@@ -1124,6 +1131,7 @@ function! s:call_ruby(msg)
   if !b:github_error
     setlocal nomodifiable
   end
+  syntax sync minlines=0
 endfunction
 
 function! github_dashboard#open(auth, type, ...)
@@ -1303,7 +1311,6 @@ require 'net/https'
 require 'time'
 
 module GitHubDashboard
-  MAX_LINES = 5
   class << self
     def fetch uri, username, password
       tried = false
@@ -1400,10 +1407,6 @@ module GitHubDashboard
             bfr.append bfr.count - 1, VIM::evaluate('b:github_indent') + line
           end
           VIM::command(%[let b:github_links[#{bfr.count - 1}] = [#{links.map { |e| vstr e }.join(', ')}]])
-        end
-
-        if lines.length > MAX_LINES + 1
-          VIM::command("normal! #{bfr.count - 1}Gzf#{lines.length - MAX_LINES - 1}k``")
         end
       end
       bfr[bfr.count] = (more && !result.empty?) ? VIM::evaluate('s:more_line') : ''
