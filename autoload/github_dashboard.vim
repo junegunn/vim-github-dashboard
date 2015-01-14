@@ -1195,8 +1195,8 @@ function! github_dashboard#open(auth, type, ...)
   nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
   nnoremap <silent> <buffer> <2-LeftMouse> :call <SID>action()<cr>
-  nnoremap <silent> <buffer> <tab>         :silent! call <SID>tab('')<cr>
-  nnoremap <silent> <buffer> <S-tab>       :silent! call <SID>tab('b')<cr>
+  nnoremap <silent> <buffer> <c-n>         :silent! call <SID>next_item('')<cr>
+  nnoremap <silent> <buffer> <c-p>         :silent! call <SID>next_item('b')<cr>
 endfunction
 
 function! s:find_url()
@@ -1286,7 +1286,7 @@ function! s:action()
   endif
 endfunction
 
-function! s:tab(flags)
+function! s:next_item(flags)
   call search(
              \ '\(^ *-- \zsMORE\)\|' .
              \ '\(^ *\[\zs[0-9a-fA-F]\{4,}\]\)\|' .
