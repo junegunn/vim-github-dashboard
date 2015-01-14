@@ -91,7 +91,7 @@ Commands
 Navigation
 ----------
 
-Use `Tab` and `Shift-Tab` to navigate back and forth through the links.
+Use `CTRL-N` and `CTRL-P` to navigate back and forth through the links.
 
 Press `Enter` key or `double-click` on a link to open it in the browser.
 
