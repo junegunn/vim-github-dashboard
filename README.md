@@ -118,9 +118,19 @@ Since having plain-text password in your .vimrc is not the most secure
 thing you can do, it is strongly recommended that you don't put password in
 your Vim configuration file.
 
-```vim
-let g:github_dashboard = { 'username': 'you' }
+As a more secure alternative, create a [Personal Access Token][pat], export it
+as an environment variable and use it as a password.
+
 ```
+# in some secure file sourced in your .bashrc, .bash_profile, .zshrc, etc.
+export GITHUB_TOKEN="<your 40 char token>"
+```
+
+```vim
+let g:github_dashboard = { 'username': 'you', 'password': $GITHUB_TOKEN }
+```
+
+[pat]: https://github.com/settings/tokens/new
 
 ### Without authentication
 
