@@ -1194,6 +1194,7 @@ function! github_dashboard#open(auth, type, ...)
   nnoremap <silent> <buffer> q             :bd<cr>
   nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
+  nnoremap <silent> <buffer> o             :call <SID>action()<cr>
   nnoremap <silent> <buffer> <2-LeftMouse> :call <SID>action()<cr>
   nnoremap <silent> <buffer> <c-n>         :silent! call <SID>next_item('')<cr>
   nnoremap <silent> <buffer> <c-p>         :silent! call <SID>next_item('b')<cr>
