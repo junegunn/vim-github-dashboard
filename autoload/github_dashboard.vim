@@ -1236,6 +1236,8 @@ function! s:open_url(url)
       echo "Cannot determine command to open: ". a:url
       return
     endif
+    silent! call system(cmd . ' ' . shellescape(fnameescape(a:url)))
+    return
   endif
   execute ':silent !' . cmd . ' ' . shellescape(fnameescape(a:url))
   redraw!
