@@ -996,6 +996,7 @@ function! s:init_tab(...)
 
   if a:0 == 2
     setlocal buftype=nofile noswapfile nowrap nonu cursorline foldmethod=syntax
+    call s:define_maps()
     setf github-dashboard
 
     let [what, type] = a:000
@@ -1190,7 +1191,9 @@ function! github_dashboard#open(auth, type, ...)
   endtry
 
   let s:history[a:type][who] = 1
+endfunction
 
+function! s:define_maps()
   nnoremap <silent> <buffer> q             :bd<cr>
   nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
   nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
