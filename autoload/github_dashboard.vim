@@ -1256,8 +1256,8 @@ function! github_dashboard#statusline()
     else
       return prefix .' '. url
     endif
-  else
-    return s:original_statusline
+  endif
+  return s:original_statusline
 endfunction
 
 function! github_dashboard#autocomplete(arg, cmd, cur)
