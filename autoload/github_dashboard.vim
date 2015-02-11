@@ -1194,13 +1194,22 @@ function! github_dashboard#open(auth, type, ...)
 endfunction
 
 function! s:define_maps()
-  nnoremap <silent> <buffer> q             :bd<cr>
-  nnoremap <silent> <buffer> R             :call <SID>refresh()<cr>
-  nnoremap <silent> <buffer> <cr>          :call <SID>action()<cr>
-  nnoremap <silent> <buffer> o             :call <SID>action()<cr>
-  nnoremap <silent> <buffer> <2-LeftMouse> :call <SID>action()<cr>
-  nnoremap <silent> <buffer> <c-n>         :silent! call <SID>next_item('')<cr>
-  nnoremap <silent> <buffer> <c-p>         :silent! call <SID>next_item('b')<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-quit)     :<C-u>bd<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-refresh)  :<C-u>call <SID>refresh()<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-action)   :<C-u>call <SID>action()<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-action)   :<C-u>call <SID>action()<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-action)   :<C-u>call <SID>action()<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-next)     :<C-u>silent! call <SID>next_item('')<cr>
+  nnoremap <silent> <buffer> <Plug>(ghd-prev)     :<C-u>silent! call <SID>next_item('b')<cr>
+  nmap <silent> <buffer> q             <Plug>(ghd-quit)
+  nmap <silent> <buffer> R             <Plug>(ghd-refresh)
+  nmap <silent> <buffer> <cr>          <Plug>(ghd-action)
+  nmap <silent> <buffer> o             <Plug>(ghd-action)
+  nmap <silent> <buffer> <2-LeftMouse> <Plug>(ghd-action)
+  nmap <silent> <buffer> <c-n>         <Plug>(ghd-next)
+  nmap <silent> <buffer> <tab>         <Plug>(ghd-next)
+  nmap <silent> <buffer> <c-p>         <Plug>(ghd-prev)
+  nmap <silent> <buffer> <s-tab>       <Plug>(ghd-prev)
 endfunction
 
 function! s:find_url()
