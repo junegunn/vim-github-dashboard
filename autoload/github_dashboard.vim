@@ -1207,9 +1207,7 @@ function! s:define_maps()
   nmap <silent> <buffer> o             <Plug>(ghd-action)
   nmap <silent> <buffer> <2-LeftMouse> <Plug>(ghd-action)
   nmap <silent> <buffer> <c-n>         <Plug>(ghd-next)
-  nmap <silent> <buffer> <tab>         <Plug>(ghd-next)
   nmap <silent> <buffer> <c-p>         <Plug>(ghd-prev)
-  nmap <silent> <buffer> <s-tab>       <Plug>(ghd-prev)
 endfunction
 
 function! s:find_url()
