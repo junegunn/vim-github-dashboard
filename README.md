@@ -29,8 +29,8 @@ Installation
 - [Pathogen](https://github.com/tpope/vim-pathogen)
   - `git clone https://github.com/junegunn/vim-github-dashboard.git ~/.vim/bundle/vim-github-dashboard`
 - [Vundle](https://github.com/gmarik/vundle)
-  1. Add `Bundle 'junegunn/vim-github-dashboard'` to .vimrc
-  2. Run `:BundleInstall`
+  1. Add `Plugin 'junegunn/vim-github-dashboard'` to .vimrc
+  2. Run `:PluginInstall`
 - [NeoBundle](https://github.com/Shougo/neobundle.vim)
   1. Add `NeoBundle 'junegunn/vim-github-dashboard'` to .vimrc
   2. Run `:NeoBundleInstall`
