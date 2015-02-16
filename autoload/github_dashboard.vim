@@ -1236,7 +1236,9 @@ function! s:open_url(url)
     if s:is_mac
       let cmd = 'open'
     elseif s:is_win
-      let cmd = 'start rundll32 url.dll,FileProtocolHandler'
+      execute ':silent !start rundll32 url.dll,FileProtocolHandler'
+            \ shellescape(fnameescape(a:url))
+      return
     elseif executable('xdg-open')
       let cmd = 'xdg-open'
     else
