@@ -1,9 +1,12 @@
-github-dashboard.txt	github-dashboard	Last change: January 15 2015
+github-dashboard.txt	github-dashboard	Last change: August 6 2015
                          *githubdashboard* *github-dashboard* *github-dashboard-toc*
 GITHUB-DASHBOARD - TABLE OF CONTENTS
 ==============================================================================
 
   vim-github-dashboard
+      User dashboard: :GHD! matz
+      User activity: :GHA! matz
+      Repository activity: :GHA! mruby/mruby
     Installation                                        |github-dashboard-1|
     Requirements                                        |github-dashboard-2|
       Mac OS X                                          |github-dashboard-2-1|
@@ -30,44 +33,48 @@ VIM-GITHUB-DASHBOARD                                      *vim-github-dashboard*
 Browse GitHub events (user dashboard, user/repo activity) in Vim.
 
 
+< User dashboard: :GHD! matz >________________________________________________~
+                                      *github-dashboard-user-dashboard-ghd-matz*
+
+
+https://raw.github.com/junegunn/i/master/matz-dashboard.png
+
+
+< User activity: :GHA! matz >_________________________________________________~
+                                       *github-dashboard-user-activity-gha-matz*
+
+
+https://raw.github.com/junegunn/i/master/matz-activity.png
+
+
+< Repository activity: :GHA! mruby/mruby >____________________________________~
+                          *github-dashboard-repository-activity-gha-mruby-mruby*
+
+
+https://raw.github.com/junegunn/i/master/mruby-activity.png
+
+(Color scheme used: {seoul256-light}{1})
+
+                                  {1} https://github.com/junegunn/seoul256.vim
+
+
                                                             *github-dashboard-1*
 INSTALLATION                                     *github-dashboard-installation*
 ==============================================================================
 
-{Use}{2}{your}{3}{favorite}{4}{plugin}{5}{manager}{6}.
-
-                                 *:BundleInstall* *:NeoBundleInstall* *:PlugInstall*
-
- - {Pathogen}{2}
-   - `git clone https://github.com/junegunn/vim-github-dashboard.git ~/.vim/bundle/vim-github-dashboard`
- - {Vundle}{3}
-   1. Add `Bundle 'junegunn/vim-github-dashboard'` to .vimrc
-   2. Run `:BundleInstall`
- - {NeoBundle}{5}
-   1. Add `NeoBundle 'junegunn/vim-github-dashboard'` to .vimrc
-   2. Run `:NeoBundleInstall`
- - {vim-plug}{4}
-   1. Add `Plug 'junegunn/vim-github-dashboard'` to .vimrc
-   2. Run `:PlugInstall`
-
-                            {2} https://github.com/tpope/vim-pathogen
-                            {3} https://github.com/gmarik/vundle
-                            {4} https://github.com/junegunn/vim-plug
-                            {5} https://github.com/Shougo/neobundle.vim
-                            {6} https://github.com/MarcWeber/vim-addon-manager
-                            {2} https://github.com/tpope/vim-pathogen
-                            {3} https://github.com/gmarik/vundle
-                            {5} https://github.com/Shougo/neobundle.vim
-                            {4} https://github.com/junegunn/vim-plug
+Using {vim-plug}{2}:
+>
+    Plug 'junegunn/vim-github-dashboard'
+<
+                                      {2} https://github.com/junegunn/vim-plug
 
 
                                                             *github-dashboard-2*
 REQUIREMENTS                                     *github-dashboard-requirements*
 ==============================================================================
 
- 1. Your Vim must have Ruby support enabled. Check if `:echo has('ruby')` prints
-    1.
- 2. If you see LoadError on `:ruby require 'json/pure'`, you need to install
+ 1. Your Vim must have Ruby support enabled. Check if :echo has('ruby') prints 1.
+ 2. If you see LoadError on :ruby require 'json/pure', you need to install
     `json_pure` gem.
 
 
@@ -81,9 +88,9 @@ by default it comes with an old Ruby (1.8.7), so you still need to install
 >
     sudo gem install json_pure
 <
-If your Vim crashes, try installing a newer version of Vim with {Homebrew}{7}.
+If your Vim crashes, try installing a newer version of Vim with {Homebrew}{3}.
 
-                                           {7} http://mxcl.github.io/homebrew/
+                                           {3} http://mxcl.github.io/homebrew/
 
 
 < Ubuntu >____________________________________________________________________~
@@ -92,24 +99,24 @@ If your Vim crashes, try installing a newer version of Vim with {Homebrew}{7}.
 >
     sudo apt-get install ruby rubygems vim-nox && sudo /usr/bin/gem install json_pure
 <
-(Reference: {Installing vim with ruby support (+ruby)}{8})
+(Reference: {Installing vim with ruby support (+ruby)}{4})
 
-{8} http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby
+{4} http://stackoverflow.com/questions/3794895/installing-vim-with-ruby-support-ruby
 
 
 < Windows >___________________________________________________________________~
                                                       *github-dashboard-windows*
                                                           *github-dashboard-2-3*
 
- 1. Download and install the {official GVim}{9}
- 2. Download a newer build of GVim executable from {here}{10} and replace the
+ 1. Download and install the {official GVim}{5}
+ 2. Download a newer build of GVim executable from {here}{6} and replace the
     existing one
- 3. Download and install Ruby 1.9.3 using {RubyInstaller}{11}. You must check `Add
-    Ruby executable to your PATH` option.
+ 3. Download and install Ruby 1.9.3 using {RubyInstaller}{7}. You must check Add
+    Ruby executable to your PATH option.
 
-                                      {9} http://www.vim.org/download.php#pc
-                                      {10} http://wyw.dcweb.cn/#download
-                                      {11} http://rubyinstaller.org/downloads/
+                                       {5} http://www.vim.org/download.php#pc
+                                       {6} http://wyw.dcweb.cn/#download
+                                       {7} http://rubyinstaller.org/downloads/
 
 
                                                             *github-dashboard-3*
@@ -124,10 +131,10 @@ COMMANDS                                             *github-dashboard-commands*
                                                       *:GHDashboard* *:GHActivity*
 
  - `:GHDashboard`
- - `:GHDashboard USER`
+ - :GHDashboard USER
  - `:GHActivity`
- - `:GHActivity USER`
- - `:GHActivity USER/REPO`
+ - :GHActivity USER
+ - :GHActivity USER/REPO
 
 
 < Without authentication (60 calls/hour limit, only public activities) >______~
@@ -135,9 +142,9 @@ COMMANDS                                             *github-dashboard-commands*
 
                                                           *github-dashboard-3-2*
 
- - `:GHDashboard! USER`
- - `:GHActivity! USER`
- - `:GHActivity! USER/REPO`
+ - :GHDashboard! USER
+ - :GHActivity! USER
+ - :GHActivity! USER/REPO
 
 
                                                             *github-dashboard-4*
@@ -172,9 +179,17 @@ If you don't want to be asked for username and password, you can set up
 Since having plain-text password in your .vimrc is not the most secure thing
 you can do, it is strongly recommended that you don't put password in your Vim
 configuration file.
+
+As a more secure alternative, create a {Personal Access Token}{8}, export it
+as an environment variable and use it as a password.
 >
-    let g:github_dashboard = { 'username': 'you' }
+    # in some secure file sourced in your .bashrc, .bash_profile, .zshrc, etc.
+    export GITHUB_TOKEN="<your 40 char token>"
+
+    let g:github_dashboard = { 'username': 'you', 'password': $GITHUB_TOKEN }
 <
+                                    {8} https://github.com/settings/tokens/new
+
 
 < Without authentication >____________________________________________________~
                                        *github-dashboard-without-authentication*
@@ -190,12 +205,12 @@ then: `:GHDashboard!` and `:GHActivity!`.
                 *github-dashboard-caveat-about-github-two-factor-authentication*
                                                           *github-dashboard-5-2*
 
-If you have enabled {GitHub Two-factor authentication}{12}, you cannot login
+If you have enabled {GitHub Two-factor authentication}{9}, you cannot login
 with your username and password. In that case, you can generate a {Personal
-Access Token}{13} and use it as the password.
+Access Token}{10} and use it as the password.
 
-          {12} https://github.com/settings/two_factor_authentication/configure
-          {13} https://github.com/settings/applications
+           {9} https://github.com/settings/two_factor_authentication/configure
+           {10} https://github.com/settings/applications
 
 
                                                             *github-dashboard-6*
@@ -247,8 +262,6 @@ PROFILES                                             *github-dashboard-profiles*
 
 In case you need access to GitHub Enterprise as well as the public GitHub, you
 might want to define multiple sets of configuration as profiles.
-
-                                *g:github_dashboard#ck* *g:github_dashboard#super*
 >
     " Default configuration for public GitHub
     let g:github_dashboard = {
@@ -285,9 +298,9 @@ Then you can access each GitHub instance like so:
 AUTHOR                                                 *github-dashboard-author*
 ==============================================================================
 
-{Junegunn Choi}{14}
+{Junegunn Choi}{11}
 
-                                              {14} https://github.com/junegunn
+                                              {11} https://github.com/junegunn
 
 
                                                             *github-dashboard-9*
