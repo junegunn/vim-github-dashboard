@@ -1412,6 +1412,7 @@ module GitHubDashboard
         lines = process(prefix, event, index)
         lines.each_with_index do |line, idx|
           line, *links = line
+          links = links.map { |l| l.start_with?('/') ? prefix + l : l }
 
           if idx == 0
             emoji = to_utf8 VIM::evaluate("s:emoji_for('#{event['type']}', 1)")
