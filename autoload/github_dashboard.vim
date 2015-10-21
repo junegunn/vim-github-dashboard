@@ -1020,7 +1020,7 @@ function! s:init_tab(...)
     let bufname_prefix = '['.prefix.split(what, '/')[-1].']'
     let bufname = bufname_prefix
     let bufidx = 2
-    while bufexists(bufname)
+    while buflisted(bufname)
       let bufname = bufname_prefix . '('. bufidx .')'
       let bufidx = bufidx + 1
     endwhile
