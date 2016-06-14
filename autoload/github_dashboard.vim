@@ -1535,7 +1535,10 @@ module GitHubDashboard
         tw = [tw - 10, 1].max
       end
 
-      emoji(str).gsub(/(.{1,#{tw}})(\s+|$)/, "\\1\n").lines.map(&:chomp)
+      emoji(str).each_line.map(&:rstrip).drop_while(&:empty?).map do |line|
+        line.length > tw ?
+          line.gsub(/(.{1,#{tw}})(\s+|$)/, "\\1\n").each_line.map(&:rstrip) : line
+      end.flatten
     end
 
     def error e
