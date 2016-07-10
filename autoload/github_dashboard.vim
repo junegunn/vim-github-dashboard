@@ -1366,13 +1366,15 @@ module GitHubDashboard
     end
 
     def more
-      main = Thread.current
-      watcher = Thread.new {
-        while VIM::evaluate('getchar(1)')
-          sleep 0.1
-        end
-        main.kill
-      }
+      if 0 == VIM::evaluate('has("nvim")')
+        main = Thread.current
+        watcher = Thread.new {
+          while VIM::evaluate('getchar(1)')
+            sleep 0.1
+          end
+          main.kill
+        }
+      end
       overbose = $VERBOSE
       $VERBOSE = nil
       username = VIM::evaluate('b:github_username')
