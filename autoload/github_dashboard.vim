@@ -1455,7 +1455,7 @@ module GitHubDashboard
         wrap(data['comment']['body']).map { |e| [e] }
       when 'CreateEvent'
         if data['ref']
-          ref_url = repo_url + "/tree/#{data['ref'].split('/').last}"
+          ref_url = repo_url + "/tree/#{data['ref']}"
           [["[#{who}] created #{data['ref_type']} [#{data['ref']}] at [#{repo}]", who_url, ref_url, repo_url]]
         else
           [["[#{who}] created #{data['ref_type']} [#{repo}]", who_url, repo_url]]
@@ -1505,7 +1505,7 @@ module GitHubDashboard
         [["[#{who}] commented on pull request [#{repo}##{prnum}]", who_url, data['comment']['html_url']]] +
         wrap(data['comment']['body']).map { |e| [e] }
       when 'PushEvent'
-        branch = data['ref'].split('/').last
+        branch = data['ref'].split('/').drop(2).join('/')
         ref_url = repo_url + "/tree/#{branch}"
         [["[#{who}] pushed to [#{branch}] at [#{repo}]", who_url, ref_url, repo_url]] +
         data['commits'].map { |commit|
