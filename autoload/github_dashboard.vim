@@ -1509,7 +1509,7 @@ module GitHubDashboard
         ref_url = repo_url + "/tree/#{branch}"
         [["[#{who}] pushed to [#{branch}] at [#{repo}]", who_url, ref_url, repo_url]] +
         data['commits'].map { |commit|
-          title = emoji commit['message'].lines.first.chomp
+          title = emoji (commit['message'].lines.first || "").chomp
           ["[#{commit['sha'][0, 7]}] #{title}", repo_url + '/commit/' + commit['sha']]
         }
       when 'ReleaseEvent'
