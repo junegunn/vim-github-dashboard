@@ -1396,7 +1396,7 @@ module GitHubDashboard
 
       # Doesn't work on 1.8.7
       # more = res.header['Link'].scan(/(?<=<).*?(?=>; rel=\"next)/)[0]
-      more = res.header['Link'] && res.header['Link'].scan(/<.*?; rel=\"next/)[0]
+      more = res.header['Link'] && res.header['Link'].scan(/<[^<>]*?>; rel=\"next/)[0]
       more = more && more.split('>; rel')[0][1..-1]
 
       VIM::command(%[normal! G"_d$])
