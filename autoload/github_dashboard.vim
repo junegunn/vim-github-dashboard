@@ -929,6 +929,7 @@ let s:emoji_map = {
 \  'PublicEvent':                   'tada',
 \  'PullRequestEvent':              'angel',
 \  'PullRequestReviewCommentEvent': 'speech_balloon',
+\  'PullRequestReviewEvent':        'hand',
 \  'PushEvent':                     'dango',
 \  'ReleaseEvent':                  'bookmark',
 \  'TeamAddEvent':                  'busts_in_silhouette',
@@ -1500,6 +1501,9 @@ module GitHubDashboard
          ["[#{who}] #{action} pull request [#{repo}##{data['number']}]", who_url, data['pull_request']['html_url']],
          [title]
         ]
+      when 'PullRequestReviewEvent'
+        prnum = data['pull_request']['url'].scan(/[0-9]+$/).first
+        [["[#{who}] requested your review on pull request [#{repo}##{prnum}]", who_url, data['pull_request']['html_url']]]
       when 'PullRequestReviewCommentEvent'
         prnum = data['comment']['pull_request_url'].scan(/[0-9]+$/).first
         [["[#{who}] commented on pull request [#{repo}##{prnum}]", who_url, data['comment']['html_url']]] +
